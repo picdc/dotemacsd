@@ -1,3 +1,4 @@
+
 ;;; mdrp-theme.el --- -*- lexical-binding: t -*-
 
 ;; Copyright (c) 2020-2020 mdrp and contributors.
@@ -38,7 +39,7 @@
 
   :config
   ;; Global settings (defaults)
-  (load-theme 'doom-one t)
+  (load-theme 'doom-solarized-dark t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)

@@ -35,8 +35,8 @@
 ;; Get rid of the cl is deprecated warning
 (setq byte-compile-warnings '(cl-functions))
 
-(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;;;;; From MatthewZMD
 
@@ -145,7 +145,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'mdrp-selected)
 
-(require 'mdrp-god-mode)
+;; (require 'mdrp-god-mode)
 
 ;;- KEYBINDINGS
 
@@ -172,9 +172,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'mdrp-ansi-color)
 
-(require 'mdrp-rainbow-mode)
+;; (require 'mdrp-rainbow-mode)
 
-(require 'mdrp-rainbow-delimiters)
+;; (require 'mdrp-rainbow-delimiters)
 
 (require 'mdrp-theme)
 
@@ -224,9 +224,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 ;;;; ORG MODE
 
-(update-to-load-path (expand-file-name "elisp-configs/org" user-emacs-directory))
+;; (update-to-load-path (expand-file-name "elisp-configs/org" user-emacs-directory))
 
-(require 'mdrp-org)
+;; (require 'mdrp-org)
 
 ;;;; LANGUAGE SPECIFIC PACKAGES:
 
