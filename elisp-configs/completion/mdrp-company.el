@@ -39,7 +39,7 @@
          (org-mode . company-mode))
   :custom
   (company-minimum-prefix-length 1)
-  (company-idle-delay 0)
+  (company-idle-delay nil)
   :config
   (defun mdrp/disable-automatic-company ()
     (interactive)

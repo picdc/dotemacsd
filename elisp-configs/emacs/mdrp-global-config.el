@@ -29,6 +29,7 @@
 
 ;;; Code:
 
+;;Emacs-client only
 (require 'server)
 (unless (server-running-p) (server-start))
 

@@ -28,11 +28,11 @@
 ;;; Commentary:
 
 ;;; Code:
-(use-package opam-user-setup
-  :after tuareg
-  :load-path "custom/"
-  :config (ignore "Loaded 'flycheck-popup")
-  )
+;; (use-package opam-user-setup
+;;   :after tuareg
+;;   :load-path "custom/"
+;;   :config (ignore "Loaded 'flycheck-popup")
+;;   )
 
 (use-package tuareg
   :config
@@ -119,15 +119,10 @@
 (use-package dune-minor
   :load-path "custom/"
   :hook (tuareg-mode . dune-minor-mode))
-  )
-
-;; (use-package ocamlformat
-;;   :hook (before-save . ocamlformat-before-save)
-;;   )
 
 (use-package merlin
-  :hook ((tuareg-mode merlin-mode)
-         (merlin-mode company-mode))
+  :hook ((tuareg-mode . merlin-mode)
+         (merlin-mode . company-mode))
   :custom
   (merlin-error-after-save nil)
   (merlin-completion-with-doc t)
@@ -136,25 +131,25 @@
   (message "merlin")
   )
 
-;; (use-package flycheck-ocaml
-;;   :hook (tuareg-mode . flycheck-ocaml-setup))
+(use-package flycheck-ocaml
+  :hook (tuareg-mode . flycheck-ocaml-setup))
 
-;; (with-eval-after-load 'merlin
-;;   ;; Disable Merlin's own error checking
-;;   (setq merlin-error-after-save nil)
+(with-eval-after-load 'merlin
+  ;; Disable Merlin's own error checking
+  (setq merlin-error-after-save nil)
 
-;;   ;; Enable Flycheck checker
-;;   (flycheck-ocaml-setup))
+  ;; Enable Flycheck checker
+  (flycheck-ocaml-setup))
 
-;; (add-hook 'tuareg-mode-hook #'merlin-mode)
+(add-hook 'tuareg-mode-hook #'merlin-mode)
 
-;; (use-package flycheck-ocaml
-;;   :hook (merlin-mode . +ocaml-init-flycheck-h)
-;;   :config
-;;   (defun +ocaml-init-flycheck-h ()
-;;     "Activate `flycheck-ocaml`"
-;;     ;; Enable Flycheck checker
-;;     (flycheck-ocaml-setup)))
+(use-package flycheck-ocaml
+  :hook (merlin-mode . +ocaml-init-flycheck-h)
+  :config
+  (defun +ocaml-init-flycheck-h ()
+    "Activate `flycheck-ocaml`"
+    ;; Enable Flycheck checker
+    (flycheck-ocaml-setup)))
 
 (use-package merlin-eldoc
   :hook (merlin-mode . merlin-eldoc-setup)
@@ -191,47 +186,15 @@
   :mode ("^dune$" "^dune-project$")
   )
 
-(use-package ocamlformat)
-(add-hook 'tuareg-mode-hook (lambda ()
-                              (define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
-                              (add-hook 'before-save-hook #'ocamlformat-before-save)))
+(use-package ocamlformat
+  :config
+  (add-hook 'tuareg-mode-hook
+            (lambda ()
+              (define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
+              (add-hook 'before-save-hook #'ocamlformat-before-save)))
+  )
 
 (provide 'mdrp-ocaml)
-
-;;;; REASON
-
-;; (defun shell-cmd (cmd)
-;;   "Returns the stdout output of a shell command or nil if the command returned
-;;    an error"
-;;   (car (ignore-errors (apply 'process-lines (split-string cmd)))))
-
-;; (defun reason-cmd-where (cmd)
-;;   (let ((where (shell-cmd cmd)))
-;;     (if (not (string-equal "unknown flag ----where" where))
-;;       where)))
-
-;; (let* ((refmt-bin (or (reason-cmd-where "refmt ----where")
-;;                       (shell-cmd "which refmt")
-;;                       (shell-cmd "which bsrefmt")))
-;;        (merlin-bin (or (reason-cmd-where "ocamlmerlin ----where")
-;;                        (shell-cmd "which ocamlmerlin")))
-;;        (merlin-base-dir (when merlin-bin
-;;                           (replace-regexp-in-string "bin/ocamlmerlin$" "" merlin-bin))))
-;;   ;; Add merlin.el to the emacs load path and tell emacs where to find ocamlmerlin
-;;   (when merlin-bin
-;;     (add-to-list 'load-path (concat merlin-base-dir "share/emacs/site-lisp/"))
-;;     (setq merlin-command merlin-bin))
-
-;;   (when refmt-bin
-;;     (setq refmt-command refmt-bin)))
-
-;; (require 'reason-mode)
-;; (require 'merlin)
-;; (add-hook 'reason-mode-hook (lambda ()
-;;                               (add-hook 'before-save-hook 'refmt-before-save)
-;;                               (merlin-mode)))
-
-;; (setq merlin-ac-setup t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; mdrp-ocaml.el ends here

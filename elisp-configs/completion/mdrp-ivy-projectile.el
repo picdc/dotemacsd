@@ -376,16 +376,16 @@
          )
   )
 
-;; (use-package projectile
-;;   :bind
-;;   ("M-p" . projectile-command-map)
-;;   :custom
-;;   (projectile-completion-system 'ivy)
-;;   :init
-;;   (projectile-mode 1)
-;;   ;; :config
-;;   ;; (add-to-list 'projectile-globally-ignored-directories "node_modules")
-;;   )
+(use-package projectile
+  :bind
+  ("M-p" . projectile-command-map)
+  :custom
+  (projectile-completion-system 'ivy)
+  :init
+  (projectile-mode 1)
+  ;; :config
+  ;; (add-to-list 'projectile-globally-ignored-directories "node_modules")
+  )
 
 (provide 'mdrp-ivy-projectile)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

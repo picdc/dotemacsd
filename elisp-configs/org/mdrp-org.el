@@ -225,45 +225,45 @@ Add this function to `org-mode-hook'."
   ;; (org-bullets-bullet-list '("" "" "" "" "" "" ""))
 )
 
-(use-package calfw
-  :config
-  (setq cfw:fchar-junction ?╋
-        cfw:fchar-vertical-line ?┃
-        cfw:fchar-horizontal-line ?━
-        cfw:fchar-left-junction ?┣
-        cfw:fchar-right-junction ?┫
-        cfw:fchar-top-junction ?┯
-        cfw:fchar-top-left-corner ?┏
-        cfw:fchar-top-right-corner ?┓)
-)
+;; (use-package calfw
+;;   :config
+;;   (setq cfw:fchar-junction ?╋
+;;         cfw:fchar-vertical-line ?┃
+;;         cfw:fchar-horizontal-line ?━
+;;         cfw:fchar-left-junction ?┣
+;;         cfw:fchar-right-junction ?┫
+;;         cfw:fchar-top-junction ?┯
+;;         cfw:fchar-top-left-corner ?┏
+;;         cfw:fchar-top-right-corner ?┓)
+;; )
 
-(use-package calfw-org
-  :after calfw
-  :config
-  (define-prefix-command 'mdrp-calfw-map nil "Cal-")
-  (defun cfw:org-capture-day ()
-    (with-current-buffer  (get-buffer-create cfw:calendar-buffer-name)
-      (let ((pos (cfw:cursor-to-nearest-date)))
-        (concat "<"
-                (format-time-string  "%Y-%m-%d %a 09:00"
-                                     (encode-time 0 0 0
-                                                  (calendar-extract-day pos)
-                                                  (calendar-extract-month pos)
-                                                  (calendar-extract-year pos)))
-                ">"))))
-  :bind-keymap ("M-c" . mdrp-calfw-map)
-  :bind (
-         (:map mdrp-calfw-map
-               ("c" . cfw:open-calendar-buffer)
-               ("o" . cfw:open-org-calendar)
-               )
-         )
-  :custom
-  (cfw:org-capture-template
-   `("c" "calfw2org" entry (file+headline ,(concat org-directory "agenda.org") "Calendrier")
-     "* %?\nSCHEDULED: %(cfw:org-capture-day)" :empty-lines 1)
-   )
-  )
+;; (use-package calfw-org
+;;   :after calfw
+;;   :config
+;;   (define-prefix-command 'mdrp-calfw-map nil "Cal-")
+;;   (defun cfw:org-capture-day ()
+;;     (with-current-buffer  (get-buffer-create cfw:calendar-buffer-name)
+;;       (let ((pos (cfw:cursor-to-nearest-date)))
+;;         (concat "<"
+;;                 (format-time-string  "%Y-%m-%d %a 09:00"
+;;                                      (encode-time 0 0 0
+;;                                                   (calendar-extract-day pos)
+;;                                                   (calendar-extract-month pos)
+;;                                                   (calendar-extract-year pos)))
+;;                 ">"))))
+;;   :bind-keymap ("M-c" . mdrp-calfw-map)
+;;   :bind (
+;;          (:map mdrp-calfw-map
+;;                ("c" . cfw:open-calendar-buffer)
+;;                ("o" . cfw:open-org-calendar)
+;;                )
+;;          )
+;;   :custom
+;;   (cfw:org-capture-template
+;;    `("c" "calfw2org" entry (file+headline ,(concat org-directory "agenda.org") "Calendrier")
+;;      "* %?\nSCHEDULED: %(cfw:org-capture-day)" :empty-lines 1)
+;;    )
+;;   )
 
 ;; The request can be wrong depending on Google updates, evaluate this:
 ;; (concat org-gcal-auth-url
@@ -271,33 +271,33 @@ Add this function to `org-mode-hook'."
 ;;         "&response_type=code"
 ;;         "&redirect_uri=" (url-hexify-string "urn:ietf:wg:oauth:2.0:oob")
 ;;         "&scope=" (url-hexify-string org-gcal-resource-url))
-(use-package org-gcal
-  :custom
-  (org-gcal-client-id (get-secrets-config-value 'org-gcal-client-id))
-  (org-gcal-client-secret (get-secrets-config-value 'org-gcal-client-secret))
-  (org-gcal-fetch-file-alist
-   `(
-     (,(get-secrets-config-value 'calendar-company) . "~/org/calendar_company.org")
-     (,(get-secrets-config-value 'calendar-user) . "~/org/calendar_user.org")
-     )
-   )
-  )
+;; (use-package org-gcal
+;;   :custom
+;;   (org-gcal-client-id (get-secrets-config-value 'org-gcal-client-id))
+;;   (org-gcal-client-secret (get-secrets-config-value 'org-gcal-client-secret))
+;;   (org-gcal-fetch-file-alist
+;;    `(
+;;      (,(get-secrets-config-value 'calendar-company) . "~/org/calendar_company.org")
+;;      (,(get-secrets-config-value 'calendar-user) . "~/org/calendar_user.org")
+;;      )
+;;    )
+;;   )
 
-(use-package org-super-agenda
-  :ensure t
-  :config
-  (setq org-super-agenda-groups
-        '(;; Each group has an implicit Boolean OR operator between its selectors.
-          (:name "ASDSD"  ; Optionally specify section name
-                 :time-grid t  ; Items that appear on the time grid
-                 )
-          ;; After the last group, the agenda will display items that didn't
-          ;; match any of these groups, with the default order position of 99
-          ))
-  (org-super-agenda-mode)
-  ;; (org-agenda nil "a")
-  ;; (setq org-agenda-log-mode 1)
-  )
+;; (use-package org-super-agenda
+;;   :ensure t
+;;   :config
+;;   (setq org-super-agenda-groups
+;;         '(;; Each group has an implicit Boolean OR operator between its selectors.
+;;           (:name "ASDSD"  ; Optionally specify section name
+;;                  :time-grid t  ; Items that appear on the time grid
+;;                  )
+;;           ;; After the last group, the agenda will display items that didn't
+;;           ;; match any of these groups, with the default order position of 99
+;;           ))
+;;   (org-super-agenda-mode)
+;;   ;; (org-agenda nil "a")
+;;   ;; (setq org-agenda-log-mode 1)
+;;   )
 
 (provide 'mdrp-org)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

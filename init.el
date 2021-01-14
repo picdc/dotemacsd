@@ -224,9 +224,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 ;;;; ORG MODE
 
-;; (update-to-load-path (expand-file-name "elisp-configs/org" user-emacs-directory))
+(update-to-load-path (expand-file-name "elisp-configs/org" user-emacs-directory))
 
-;; (require 'mdrp-org)
+(require 'mdrp-org)
 
 ;;;; LANGUAGE SPECIFIC PACKAGES:
 
@@ -238,13 +238,15 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'mdrp-ocaml)
 
+(require 'mdrp-reason) ;;hélas
+
 (require 'mdrp-md-pandoc)
 
 (require 'mdrp-web-modes)
 
 (require 'mdrp-lsp)
 
-(require 'mdrp-smt)
+;; (require 'mdrp-smt)
 
 ;;;; Footer
 
