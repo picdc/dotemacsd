@@ -83,170 +83,170 @@
 (setq byte-compile-warnings '(cl-functions))
 
 ;; Miscellaneous Packages
-(defgroup pokemacs nil
-  "Customisation group for pokemacs"
-  :group 'emacs
-  :tag "Pokemacs customisation")
+  (defgroup pokemacs nil
+    "Customisation group for pokemacs"
+    :group 'emacs
+    :tag "Pokemacs customisation")
 
-(defgroup pokemacs-packages nil
-  "Pokemacs packages options."
-  :group 'pokemacs
-  :tag "Packages")
+  (defgroup pokemacs-packages nil
+    "Pokemacs packages options."
+    :group 'pokemacs
+    :tag "Packages")
 
-(defcustom use-dashboard nil
-  "If non-nil, uses the dashboard packages."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag "󰕮 Dashboard")
+  (defcustom use-dashboard nil
+    "If non-nil, uses the dashboard packages."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag "󰕮 Dashboard")
 
-(defcustom use-eaf nil
-  "If non-nil, uses the Emacs application framework."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag "󰲋 Emacs Application Framework")
+  (defcustom use-eaf nil
+    "If non-nil, uses the Emacs application framework."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag "󰲋 Emacs Application Framework")
 
-(defcustom use-gcal nil
-  "If non-nil, uses the org-gcal package."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag " Org Google Calendar")
+  (defcustom use-gcal nil
+    "If non-nil, uses the org-gcal package."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag " Org Google Calendar")
 
-(defcustom use-god nil
-  "If non-nil, uses the god (mode) packages.
-Similar to Vim's separation of command/insert modes"
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag " God Mode")
+  (defcustom use-god nil
+    "If non-nil, uses the god (mode) packages.
+  Similar to Vim's separation of command/insert modes"
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag " God Mode")
 
-(defcustom use-magit-todos nil
-  "If non-nil, show todos in the current project in magit buffer."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag " Magit todos")
+  (defcustom use-magit-todos nil
+    "If non-nil, show todos in the current project in magit buffer."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag " Magit todos")
 
-(defcustom use-org-agenda-startup nil
-  "Start the org agenda at startup."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag " Org Agenda")
+  (defcustom use-org-agenda-startup nil
+    "Start the org agenda at startup."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag " Org Agenda")
 
-(defcustom use-org-roam nil
-  "If non-nil, uses Org roam."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag "󰠮 Zettelkasten/Org Roam")
+  (defcustom use-org-roam nil
+    "If non-nil, uses Org roam."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag "󰠮 Zettelkasten/Org Roam")
 
-(defcustom use-pandoc nil
-  "If non-nil, uses the pandoc packages."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag " Pandoc")
+  (defcustom use-pandoc nil
+    "If non-nil, uses the pandoc packages."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag " Pandoc")
 
-(defcustom use-posframe nil
-  "If non-nil, uses the vertico-posframe packages."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag "󰹉 Posframe")
+  (defcustom use-posframe nil
+    "If non-nil, uses the vertico-posframe packages."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag "󰹉 Posframe")
 
-(defcustom use-spotify nil
-  "If non-nil, uses the spotify packages."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag " Spotify")
+  (defcustom use-spotify nil
+    "If non-nil, uses the spotify packages."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag " Spotify")
 
-(defcustom use-treemacs nil
-  "If non-nil, uses the treemacs packages."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag "󰙅 Treemacs")
+  (defcustom use-treemacs nil
+    "If non-nil, uses the treemacs packages."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag "󰙅 Treemacs")
 
-(defcustom use-window-purpose nil
-  "If non-nil, uses the window-purpose package."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag "󰡃 Window Purpose")
+  (defcustom use-window-purpose nil
+    "If non-nil, uses the window-purpose package."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag "󰡃 Window Purpose")
 
-;; Custom values
+  ;; Custom values
 
-(defgroup pokemacs-values nil
-  "Pokemacs values options."
-  :group 'pokemacs
-  :tag "Values")
+  (defgroup pokemacs-values nil
+    "Pokemacs values options."
+    :group 'pokemacs
+    :tag "Values")
 
-(defcustom pokemacs-repeat-timeout 0.5
-  "Time before repeat-mode exits."
-  :group 'pokemacs-values
-  :type 'integer
-  :tag "Repeat")
+  (defcustom pokemacs-repeat-timeout 0.5
+    "Time before repeat-mode exits."
+    :group 'pokemacs-values
+    :type 'integer
+    :tag "Repeat")
 
-;; Themes
+  ;; Themes
 
-(defgroup pokemacs-appearance nil
-  "Pokemacs appearance options."
-  :group 'pokemacs
-  :tag "Appearance")
+  (defgroup pokemacs-appearance nil
+    "Pokemacs appearance options."
+    :group 'pokemacs
+    :tag "Appearance")
 
-(defcustom pokemacs-mono-font "Fira Code"
-  "Mono font."
-  :group 'pokemacs-appearance
-  :type 'string
-  :tag " Font")
+  (defcustom pokemacs-mono-font "Fira Code"
+    "Mono font."
+    :group 'pokemacs-appearance
+    :type 'string
+    :tag " Font")
 
-(defcustom pokemacs-variable-font "Iosevka Aile"
-  "Font for variable pitch."
-  :group 'pokemacs-appearance
-  :type 'string
-  :tag " Font")
+  (defcustom pokemacs-variable-font "Iosevka Aile"
+    "Font for variable pitch."
+    :group 'pokemacs-appearance
+    :type 'string
+    :tag " Font")
 
-(defcustom pokemacs-dark-theme-p t
-  "Dark or light theme."
-  :group 'pokemacs-appearance
-  :type 'boolean
-  :tag "󰔎 Dark/Light")
+  (defcustom pokemacs-dark-theme-p t
+    "Dark or light theme."
+    :group 'pokemacs-appearance
+    :type 'boolean
+    :tag "󰔎 Dark/Light")
 
-(defcustom pokemacs-dark-theme 'doom-solarized-dark
-  "Dark theme to load."
-  :group 'pokemacs-appearance
-  :type 'symbol
-  :tag "󰖔 Dark Theme")
+  (defcustom pokemacs-dark-theme 'doom-solarized-dark
+    "Dark theme to load."
+    :group 'pokemacs-appearance
+    :type 'symbol
+    :tag "󰖔 Dark Theme")
 
-(defcustom pokemacs-light-theme 'doom-solarized-light
-  "Light theme to load."
-  :group 'pokemacs-appearance
-  :type 'symbol
-  :tag "󰖙 Light Theme")
+  (defcustom pokemacs-light-theme 'doom-solarized-light
+    "Light theme to load."
+    :group 'pokemacs-appearance
+    :type 'symbol
+    :tag "󰖙 Light Theme")
 
-(defcustom use-all-the-icons nil
-  "Use all-the-icons (when t) or nerd-icons (when nil)."
-  :group 'pokemacs-appearance
-  :type 'boolean
-  :tag " Icons")
+  (defcustom use-all-the-icons nil
+    "Use all-the-icons (when t) or nerd-icons (when nil)."
+    :group 'pokemacs-appearance
+    :type 'boolean
+    :tag " Icons")
 
-(defcustom use-header-line nil
-  "Use the header-line as the mode-line."
-  :group 'pokemacs-appearance
-  :type 'boolean
-  :tag "〜 Header-line")
+  (defcustom use-header-line nil
+    "Use the header-line as the mode-line."
+    :group 'pokemacs-appearance
+    :type 'boolean
+    :tag "〜 Header-line")
 
-(defcustom use-maximize nil
-  "If non-nil, maximize Emacs at startup."
-  :group 'pokemacs-appearance
-  :type 'boolean
-  :tag "󰊓 Maximize")
+  (defcustom use-maximize nil
+    "If non-nil, maximize Emacs at startup."
+    :group 'pokemacs-appearance
+    :type 'boolean
+    :tag "󰊓 Maximize")
 
-(defcustom use-rainbow nil
-  "If non-nil, don't be @thriim.
-Rainbowify parentheses and other things."
-  :group 'pokemacs-appearance
-  :type 'boolean
-  :tag "󱃗 Rainbows")
+  (defcustom use-rainbow nil
+    "If non-nil, don't be @thriim.
+  Rainbowify parentheses and other things."
+    :group 'pokemacs-appearance
+    :type 'boolean
+    :tag "󱃗 Rainbows")
 
-(defcustom use-solaire t
-  "If non-nil, uses the solaire package.
-Distinguishes between \"real\" buffers and \"unreal\" ones by giving the latter a darker background."
-  :group 'pokemacs-appearance
-  :type 'boolean
-  :tag " Solaire")
+  (defcustom use-solaire t
+    "If non-nil, uses the solaire package.
+  Distinguishes between \"real\" buffers and \"unreal\" ones by giving the latter a darker background."
+    :group 'pokemacs-appearance
+    :type 'boolean
+    :tag " Solaire")
 
 (defcustom use-visual-fill nil
   "If non-nil, fill the frame when there's only one."
@@ -254,23 +254,16 @@ Distinguishes between \"real\" buffers and \"unreal\" ones by giving the latter 
   :type 'boolean
   :tag " Visual Fill")
 
-;; Dictionaries
-
-(defgroup pokemacs-dictionaries nil
-  "Pokemacs dictionaries options."
-  :group 'pokemacs
-  :tag "Dictionaries")
-
-(defcustom pokemacs-dict "en-GB"
-  "Dictionary language.
-Specify the chosen language used by spell checking tools in pokemacs."
-  :group 'pokemacs-dictionaries
-  :type '(choice (const :tag "en-GB"   "en-GB")
-                 (const :tag "en-US"   "en-US")
-                 (const :tag "fr"      "fr")
-                 (const :tag "No dict" nil)
-                 (string :tag "Other"))
-  :tag " Dictionary")
+  (defcustom pokemacs-dict "en-GB"
+    "Dictionary language.
+  Specify the chosen language used by spell checking tools in pokemacs."
+    :group 'pokemacs-dictionaries
+    :type '(choice (const :tag "en-GB"   "en-GB")
+                   (const :tag "en-US"   "en-US")
+                   (const :tag "fr"      "fr")
+                   (const :tag "No dict" nil)
+                   (string :tag "Other"))
+    :tag " Dictionary")
 
 (setq user-init-file (or load-file-name (buffer-file-name)))
 (setq user-emacs-directory (file-name-directory user-init-file))
@@ -467,6 +460,7 @@ Specify the chosen language used by spell checking tools in pokemacs."
 (add-to-list 'auto-mode-alist '("\\.in\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode))
+(add-to-list 'auto-mode-alist '("\\.wast\\'" . lisp-mode))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -1876,10 +1870,15 @@ in the current buffer.
          (clojurec-mode-hook . lsp-deferred)
          (elm-mode . lsp-deferred)
          (fsharp-mode . lsp-deferred)
+         (js-mode . lsp-deferred)
+         (js-ts-mode . lsp-deferred)
          (kotlin-mode . lsp-deferred)
          (python-mode . lsp-deferred)
          (enh-ruby-mode . lsp-deferred)
          (rustic-mode . lsp-deferred)
+         (rust-mode . lsp-deferred)
+         (rust-ts-mode . lsp-deferred)
+         (typescript-ts-mode . lsp-deferred)
          (tuareg-mode . lsp-deferred))
   :general
   (:keymaps 'lsp-mode-map
@@ -2017,6 +2016,35 @@ in the current buffer.
   :defer t
   :disabled)
 
+;; (defun lsp-booster--advice-json-parse (old-fn &rest args)
+;;   "Try to parse bytecode instead of json."
+;;   (or
+;;    (when (equal (following-char) ?#)
+;;      (let ((bytecode (read (current-buffer))))
+;;        (when (byte-code-function-p bytecode)
+;;          (funcall bytecode))))
+;;    (apply old-fn args)))
+;; (advice-add (if (progn (require 'json)
+;;                        (fboundp 'json-parse-buffer))
+;;                 'json-parse-buffer
+;;               'json-read)
+;;             :around
+;;             #'lsp-booster--advice-json-parse)
+
+;; (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+;;   "Prepend emacs-lsp-booster command to lsp CMD."
+;;   (let ((orig-result (funcall old-fn cmd test?)))
+;;     (if (and (not test?)                             ;; for check lsp-server-present?
+;;              (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+;;              lsp-use-plists
+;;              (not (functionp 'json-rpc-connection))  ;; native json-rpc
+;;              (executable-find "emacs-lsp-booster"))
+;;         (progn
+;;           (message "Using emacs-lsp-booster for %s!" orig-result)
+;;           (cons "emacs-lsp-booster" orig-result))
+;;       orig-result)))
+;; (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+
 (use-package prog-mode
   :ensure nil
   :init
@@ -2049,6 +2077,7 @@ in the current buffer.
   (python-mode   . apheleia-mode)
   (enh-ruby-mode . apheleia-mode)
   (rustic-mode   . apheleia-mode)
+  (rust-mode     . apheleia-mode)
   (rust-ts-mode  . apheleia-mode)
   (tuareg-mode   . apheleia-mode)
   :config
@@ -2175,7 +2204,7 @@ have one rule for each file type."
   (defvar-keymap pokemacs-flycheck-overlay-map
     :doc "Keymap attached to lsp and flycheck overlays.")
   (fset 'pokemacs-flycheck-overlay-map pokemacs-flycheck-overlay-map)
-  :hook ((prog-mode markdown-mode git-commit-mode text-mode) . flycheck-mode)
+  :hook ((prog-mode markdown-mode git-commit-mode text-mode rust-mode) . flycheck-mode)
   :general
   (:keymaps 'pokemacs-fly-map
             "p" 'flycheck-prev-error)
@@ -2297,9 +2326,9 @@ with a prefix ARG."
   (setq separedit-default-mode 'markdown-mode)
   (message "`separedit' loaded"))
 
-(use-package treemacs
-  :defer t
-  :config (message "`treemacs' loaded"))
+;; (use-package treemacs
+;;   :defer t
+;;   :config (message "`treemacs' loaded"))
 
 (use-package uniquify
   :disabled
@@ -2753,7 +2782,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
   (corfu-quit-no-match t)
-  (corfu-auto-prefix 1)
+  (corfu-auto-prefix 2)
   (corfu-auto-delay 0)
   (corfu-separator ?\s)
   ;; (corfu-quit-at-boundary nil)
@@ -4252,10 +4281,19 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
               "C-c c" 'seeing-is-believing-clear)))
 
 (when use-rust
-
   (use-package rust-mode
-    :init (setq rust-mode-treesitter-derive t))
-
+    :ensure t
+    :init (setq rust-mode-treesitter-derive t)
+    :hook ('rust-mode-hook #'lsp)
+    :general
+    (:keymaps 'rust-mode-map
+              "C-c s" 'lsp-rust-analyzer-status
+              "C-M-;" 'mdrp/rust-doc-comment-dwim-following
+              "C-M-," 'mdrp/rust-doc-comment-dwim-enclosing
+              [remap compile] 'rustic-compile
+              [remap recompile] 'rustic-recompile
+              )
+    )
   (use-package rustic
     :ensure (:repo "emacs-rustic/rustic")
     :mode ("\\.rs$" . rustic-mode)
@@ -4270,6 +4308,12 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
               "C-M-;" 'pokemacs-rust-doc-comment-dwim-following
               "C-M-," 'pokemacs-rust-doc-comment-dwim-enclosing)
     :init
+    ;;(let* ((mode '("\\.rs\\'" . rust-mode))
+    ;;       (mode-ts '("\\.rs\\'" . rust-ts-mode)))
+    ;;  (when (member mode auto-mode-alist)
+    ;;    (setq auto-mode-alist (remove mode auto-mode-alist)))
+    ;;  (when (member mode-ts auto-mode-alist)
+    ;;    (setq auto-mode-alist (remove mode-ts auto-mode-alist))))
 
     (defun pokemacs-rust-doc-comment-dwim (c)
       "Comment or uncomment the current line or text selection."
@@ -4369,6 +4413,8 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
     ;;   (setq-local outline-regexp "///[;]\\{1,8\\}[^ \t]"))
     (message "`rustic' loaded")))
 
+(use-package csv-mode)
+
 (when use-sicp
   (use-package sicp))
 
@@ -4396,7 +4442,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 (setq post-custom-file (expand-file-name "post-custom.el" user-emacs-directory))
 (load post-custom-file)
 ;; Load personal configuration for org mode
-(load-file (expand-file-name "~/.secrets/org.el"))
+;; (load-file (expand-file-name "~/.secrets/org.el"))
 (message "`init' file loaded")
 ;;;; Footer
 

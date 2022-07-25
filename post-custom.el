@@ -17,10 +17,10 @@
 
 ;;; Code:
 
-(use-package smtpmail
-  :ensure nil
-  :ensure-system-package msmtp)
-
+;; (use-package smtpmail
+;;   :ensure nil
+;;   :ensure-system-package msmtp)
+;;
 ;; (load-file (expand-file-name "~/mu4e/mu4e.el"))
 
 ;; (general-unbind
