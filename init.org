@@ -550,6 +550,11 @@ This is a list of custom variables that allow to enable/disable features. If you
     :group 'pokemacs-dictionaries
     :type 'string
     :tag "French variant")
+
+  (defcustom use-solaire t
+  "If non-nil, uses the solaire package"
+  :group 'mdrp-packages
+  :type 'boolean)
 #+end_src
 
 ** Set useful variables
@@ -905,6 +910,7 @@ Since this is highly user dependent (I see you @thriim), the variable ~show-pare
   (add-to-list 'auto-mode-alist '("\\.in\\'" . text-mode))
   (add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
   (add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode))
+  (add-to-list 'auto-mode-alist '("\\.wast\\'" . lisp-mode))
 #+end_src
 
 ** Delete whitespace
@@ -2774,10 +2780,15 @@ Minor mode acting as a client between a language server protocol and emacs.
            (clojurec-mode-hook . lsp-deferred)
            (elm-mode . lsp-deferred)
            (fsharp-mode . lsp-deferred)
+           (js-mode . lsp-deferred)
+           (js-ts-mode . lsp-deferred)
            (kotlin-mode . lsp-deferred)
            (python-mode . lsp-deferred)
            (enh-ruby-mode . lsp-deferred)
            (rustic-mode . lsp-deferred)
+           (rust-mode . lsp-deferred)
+           (rust-ts-mode . lsp-deferred)
+           (typescript-ts-mode . lsp-deferred)
            (tuareg-mode . lsp-deferred))
     :general
     (:keymaps 'lsp-mode-map
@@ -2793,8 +2804,8 @@ Minor mode acting as a client between a language server protocol and emacs.
               "i"   'counsel-semantic-or-imenu
               "R"   'lsp-rename
               "f"   'consult-flycheck
-              "t r" 'lsp-treemacs-references
-              "t s" 'lsp-treemacs-symbols
+              ;; "t r" 'lsp-treemacs-references
+              ;; "t s" 'lsp-treemacs-symbols
               )
     :custom
     (lsp-log-io nil)
@@ -2923,10 +2934,10 @@ Minor mode acting as a client between a language server protocol and emacs.
 :END:
 
 #+begin_src emacs-lisp
-  (use-package lsp-treemacs
-    :defer t
-    :after lsp
-    :config (message "`lsp-treemacs' loaded"))
+  ;; (use-package lsp-treemacs
+  ;;   :defer t
+  ;;   :after lsp
+  ;;   :config (message "`lsp-treemacs' loaded"))
 #+end_src
 
 ** TODO [[https://github.com/gagbo/consult-lsp][Consult lsp]]
@@ -2941,6 +2952,40 @@ TODO: Not working with OCaml
     :defer t
     :disabled)
 #+end_src
+
+*** LSP Booster
+
+#+begin_src emacs-lisp
+  ;; (defun lsp-booster--advice-json-parse (old-fn &rest args)
+  ;;   "Try to parse bytecode instead of json."
+  ;;   (or
+  ;;    (when (equal (following-char) ?#)
+  ;;      (let ((bytecode (read (current-buffer))))
+  ;;        (when (byte-code-function-p bytecode)
+  ;;          (funcall bytecode))))
+  ;;    (apply old-fn args)))
+  ;; (advice-add (if (progn (require 'json)
+  ;;                        (fboundp 'json-parse-buffer))
+  ;;                 'json-parse-buffer
+  ;;               'json-read)
+  ;;             :around
+  ;;             #'lsp-booster--advice-json-parse)
+
+  ;; (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  ;;   "Prepend emacs-lsp-booster command to lsp CMD."
+  ;;   (let ((orig-result (funcall old-fn cmd test?)))
+  ;;     (if (and (not test?)                             ;; for check lsp-server-present?
+  ;;              (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+  ;;              lsp-use-plists
+  ;;              (not (functionp 'json-rpc-connection))  ;; native json-rpc
+  ;;              (executable-find "emacs-lsp-booster"))
+  ;;         (progn
+  ;;           (message "Using emacs-lsp-booster for %s!" orig-result)
+  ;;           (cons "emacs-lsp-booster" orig-result))
+  ;;       orig-result)))
+  ;; (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+#+end_src
+
 
 * Prog mode utilities
 :PROPERTIES:
@@ -3004,6 +3049,7 @@ Asynchronous code formatting after saving files.
     (python-mode   . apheleia-mode)
     (enh-ruby-mode . apheleia-mode)
     (rustic-mode   . apheleia-mode)
+    (rust-mode     . apheleia-mode)
     (rust-ts-mode  . apheleia-mode)
     (tuareg-mode   . apheleia-mode)
     :config
@@ -3183,7 +3229,7 @@ On the fly syntax checking. One of the greatest package there is for making prog
       :doc "Keymap attached to lsp and flycheck overlays."
       "M-$" #'lsp-execute-code-action)
     (fset 'mdrp-flycheck-overlay-map mdrp-flycheck-overlay-map)
-    :hook ((prog-mode markdown-mode git-commit-mode text-mode) . flycheck-mode)
+    :hook ((prog-mode markdown-mode git-commit-mode text-mode rust-mode) . flycheck-mode)
     :general
     (:keymaps 'mdrp-fly-map
               "p" 'flycheck-prev-error)
@@ -3351,9 +3397,9 @@ Allows to edit comments in a separate buffer with a chosen text-mode (default is
 :END:
 
 #+begin_src emacs-lisp
-  (use-package treemacs
-    :defer t
-    :config (message "`treemacs' loaded"))
+  ;; (use-package treemacs
+  ;;   :defer t
+  ;;   :config (message "`treemacs' loaded"))
 #+end_src
 
 * Windows/Frame management
@@ -3870,7 +3916,7 @@ When using some consult commands (like ~consult-ripgrep~), hitting ~M-RET~ will 
     (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
     (corfu-auto t)                 ;; Enable auto completion
     (corfu-quit-no-match t)
-    (corfu-auto-prefix 1)
+    (corfu-auto-prefix 2)
     (corfu-auto-delay 0)
     (corfu-separator ?\s)
     ;; (corfu-quit-at-boundary nil)
@@ -4276,8 +4322,8 @@ Nice themes that can be previewed [[https://github.com/doomemacs/themes/tree/scr
     ;; Enable custom neotree theme (all-the-icons must be installed!)
     ;; (doom-themes-neotree-config)
     ;; or for treemacs users
-    (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-    (doom-themes-treemacs-config)
+    ;; (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+    ;; (doom-themes-treemacs-config)
 
     ;; Corrects (and improves) org-mode's native fontification.
     (doom-themes-org-config)
@@ -5723,7 +5769,7 @@ Special tuareg mode when editing ~mly~ files.
     (use-package tuareg-menhir
       :ensure nil
       :defer t
-      :mode ("\\.mly'" . tuareg-menhir-mode)
+      :mode ("\\.mly\\'" . tuareg-menhir-mode)
       :config (message "`tuareg-menhir' loaded")))
 #+end_src
 
@@ -5972,12 +6018,20 @@ Some people use this, not my responsibility.
 
 #+begin_src emacs-lisp
   (when use-rust
-
     (use-package rust-mode
       :ensure t
       :init
-      (setq rust-mode-treesitter-derive t))
-
+      (setq rust-mode-treesitter-derive t)
+        :hook ('rust-mode-hook #'lsp)
+        :general
+        (:keymaps 'rust-mode-map
+                  "C-c s" 'lsp-rust-analyzer-status
+                  "C-M-;" 'mdrp/rust-doc-comment-dwim-following
+                  "C-M-," 'mdrp/rust-doc-comment-dwim-enclosing
+                  [remap compile] 'rustic-compile
+                  [remap recompile] 'rustic-recompile
+                  )
+        )
     (use-package rustic
       :ensure (:repo "emacs-rustic/rustic")
       :mode ("\\.rs$" . rustic-mode)
@@ -5992,6 +6046,12 @@ Some people use this, not my responsibility.
                 "C-M-;" 'mdrp/rust-doc-comment-dwim-following
                 "C-M-," 'mdrp/rust-doc-comment-dwim-enclosing)
       :init
+      ;;(let* ((mode '("\\.rs\\'" . rust-mode))
+      ;;       (mode-ts '("\\.rs\\'" . rust-ts-mode)))
+      ;;  (when (member mode auto-mode-alist)
+      ;;    (setq auto-mode-alist (remove mode auto-mode-alist)))
+      ;;  (when (member mode-ts auto-mode-alist)
+      ;;    (setq auto-mode-alist (remove mode-ts auto-mode-alist))))
 
       (defun mdrp/rust-doc-comment-dwim (c)
         "Comment or uncomment the current line or text selection."
@@ -6092,6 +6152,14 @@ Some people use this, not my responsibility.
       (message "`rustic' loaded")))
 #+end_src
 
+*** CSV
+
+
+#+begin_src emacs-lisp
+  (use-package csv-mode)
+#+end_src
+
+
 ** SICP
 :PROPERTIES:
 :CUSTOM_ID: sicp
@@ -6156,6 +6224,15 @@ Some people use this, not my responsibility.
     :ensure (web-beautify :repo "https://github.com/yasuyk/web-beautify"))
 #+end_src
 
+* Perso
+** Sway
+:PROPERTIES:
+:CUSTOM_ID: sway
+:END:
+
+#+begin_src emacs-lisp
+  (use-package sway)
+#+end_src
 * End
 :PROPERTIES:
 :CUSTOM_ID: end
@@ -6167,7 +6244,7 @@ After everything has been done, load [[file:post-custom.el][post-custom.el]] to 
   (setq post-custom-file (expand-file-name "post-custom.el" user-emacs-directory))
   (load post-custom-file)
   ;; Load personal configuration for org mode
-  (load-file (expand-file-name "~/.secrets/org.el"))
+  ;; (load-file (expand-file-name "~/.secrets/org.el"))
   (message "`init' file loaded")
     ;;;; Footer
 

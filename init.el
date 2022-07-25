@@ -254,6 +254,11 @@ or nil if you don't want to use an english dictionary"
   :type 'string
   :tag "French variant")
 
+(defcustom use-solaire t
+"If non-nil, uses the solaire package"
+:group 'mdrp-packages
+:type 'boolean)
+
 (setq user-init-file (or load-file-name (buffer-file-name)))
 (setq user-emacs-directory (file-name-directory user-init-file))
 
@@ -446,6 +451,7 @@ or nil if you don't want to use an english dictionary"
 (add-to-list 'auto-mode-alist '("\\.in\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode))
+(add-to-list 'auto-mode-alist '("\\.wast\\'" . lisp-mode))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -1657,10 +1663,15 @@ in the current buffer.
          (clojurec-mode-hook . lsp-deferred)
          (elm-mode . lsp-deferred)
          (fsharp-mode . lsp-deferred)
+         (js-mode . lsp-deferred)
+         (js-ts-mode . lsp-deferred)
          (kotlin-mode . lsp-deferred)
          (python-mode . lsp-deferred)
          (enh-ruby-mode . lsp-deferred)
          (rustic-mode . lsp-deferred)
+         (rust-mode . lsp-deferred)
+         (rust-ts-mode . lsp-deferred)
+         (typescript-ts-mode . lsp-deferred)
          (tuareg-mode . lsp-deferred))
   :general
   (:keymaps 'lsp-mode-map
@@ -1676,8 +1687,8 @@ in the current buffer.
             "i"   'counsel-semantic-or-imenu
             "R"   'lsp-rename
             "f"   'consult-flycheck
-            "t r" 'lsp-treemacs-references
-            "t s" 'lsp-treemacs-symbols
+            ;; "t r" 'lsp-treemacs-references
+            ;; "t s" 'lsp-treemacs-symbols
             )
   :custom
   (lsp-log-io nil)
@@ -1792,14 +1803,43 @@ in the current buffer.
   ;; (lsp-ui-sideline-show-code-actions nil)
   :config (message "`lsp-ui' loaded"))
 
-(use-package lsp-treemacs
-  :defer t
-  :after lsp
-  :config (message "`lsp-treemacs' loaded"))
+;; (use-package lsp-treemacs
+;;   :defer t
+;;   :after lsp
+;;   :config (message "`lsp-treemacs' loaded"))
 
 (use-package consult-lsp
   :defer t
   :disabled)
+
+;; (defun lsp-booster--advice-json-parse (old-fn &rest args)
+;;   "Try to parse bytecode instead of json."
+;;   (or
+;;    (when (equal (following-char) ?#)
+;;      (let ((bytecode (read (current-buffer))))
+;;        (when (byte-code-function-p bytecode)
+;;          (funcall bytecode))))
+;;    (apply old-fn args)))
+;; (advice-add (if (progn (require 'json)
+;;                        (fboundp 'json-parse-buffer))
+;;                 'json-parse-buffer
+;;               'json-read)
+;;             :around
+;;             #'lsp-booster--advice-json-parse)
+
+;; (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+;;   "Prepend emacs-lsp-booster command to lsp CMD."
+;;   (let ((orig-result (funcall old-fn cmd test?)))
+;;     (if (and (not test?)                             ;; for check lsp-server-present?
+;;              (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+;;              lsp-use-plists
+;;              (not (functionp 'json-rpc-connection))  ;; native json-rpc
+;;              (executable-find "emacs-lsp-booster"))
+;;         (progn
+;;           (message "Using emacs-lsp-booster for %s!" orig-result)
+;;           (cons "emacs-lsp-booster" orig-result))
+;;       orig-result)))
+;; (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 
 (use-package prog-mode
   :ensure nil
@@ -1834,6 +1874,7 @@ in the current buffer.
   (python-mode   . apheleia-mode)
   (enh-ruby-mode . apheleia-mode)
   (rustic-mode   . apheleia-mode)
+  (rust-mode     . apheleia-mode)
   (rust-ts-mode  . apheleia-mode)
   (tuareg-mode   . apheleia-mode)
   :config
@@ -1963,7 +2004,7 @@ have one rule for each file type."
     :doc "Keymap attached to lsp and flycheck overlays."
     "M-$" #'lsp-execute-code-action)
   (fset 'mdrp-flycheck-overlay-map mdrp-flycheck-overlay-map)
-  :hook ((prog-mode markdown-mode git-commit-mode text-mode) . flycheck-mode)
+  :hook ((prog-mode markdown-mode git-commit-mode text-mode rust-mode) . flycheck-mode)
   :general
   (:keymaps 'mdrp-fly-map
             "p" 'flycheck-prev-error)
@@ -2064,9 +2105,9 @@ with a prefix ARG."
   (setq separedit-default-mode 'markdown-mode)
   (message "`separedit' loaded"))
 
-(use-package treemacs
-  :defer t
-  :config (message "`treemacs' loaded"))
+;; (use-package treemacs
+;;   :defer t
+;;   :config (message "`treemacs' loaded"))
 
 (use-package uniquify
   :disabled
@@ -2461,7 +2502,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
   (corfu-quit-no-match t)
-  (corfu-auto-prefix 1)
+  (corfu-auto-prefix 2)
   (corfu-auto-delay 0)
   (corfu-separator ?\s)
   ;; (corfu-quit-at-boundary nil)
@@ -2773,8 +2814,8 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   ;; (doom-themes-neotree-config)
   ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  (doom-themes-treemacs-config)
+  ;; (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  ;; (doom-themes-treemacs-config)
 
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
@@ -3818,7 +3859,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (use-package tuareg-menhir
     :ensure nil
     :defer t
-    :mode ("\\.mly'" . tuareg-menhir-mode)
+    :mode ("\\.mly\\'" . tuareg-menhir-mode)
     :config (message "`tuareg-menhir' loaded")))
 
 (when use-ocaml
@@ -3971,12 +4012,20 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
               "C-c c" 'seeing-is-believing-clear)))
 
 (when use-rust
-
   (use-package rust-mode
     :ensure t
     :init
-    (setq rust-mode-treesitter-derive t))
-
+    (setq rust-mode-treesitter-derive t)
+      :hook ('rust-mode-hook #'lsp)
+      :general
+      (:keymaps 'rust-mode-map
+                "C-c s" 'lsp-rust-analyzer-status
+                "C-M-;" 'mdrp/rust-doc-comment-dwim-following
+                "C-M-," 'mdrp/rust-doc-comment-dwim-enclosing
+                [remap compile] 'rustic-compile
+                [remap recompile] 'rustic-recompile
+                )
+      )
   (use-package rustic
     :ensure (:repo "emacs-rustic/rustic")
     :mode ("\\.rs$" . rustic-mode)
@@ -3991,6 +4040,12 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
               "C-M-;" 'mdrp/rust-doc-comment-dwim-following
               "C-M-," 'mdrp/rust-doc-comment-dwim-enclosing)
     :init
+    ;;(let* ((mode '("\\.rs\\'" . rust-mode))
+    ;;       (mode-ts '("\\.rs\\'" . rust-ts-mode)))
+    ;;  (when (member mode auto-mode-alist)
+    ;;    (setq auto-mode-alist (remove mode auto-mode-alist)))
+    ;;  (when (member mode-ts auto-mode-alist)
+    ;;    (setq auto-mode-alist (remove mode-ts auto-mode-alist))))
 
     (defun mdrp/rust-doc-comment-dwim (c)
       "Comment or uncomment the current line or text selection."
@@ -4090,6 +4145,8 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
     ;;   (setq-local outline-regexp "///[;]\\{1,8\\}[^ \t]"))
     (message "`rustic' loaded")))
 
+(use-package csv-mode)
+
 (when use-sicp
   (use-package sicp))
 
@@ -4114,10 +4171,12 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 (use-package web-beautify
   :ensure (web-beautify :repo "https://github.com/yasuyk/web-beautify"))
 
+(use-package sway)
+
 (setq post-custom-file (expand-file-name "post-custom.el" user-emacs-directory))
 (load post-custom-file)
 ;; Load personal configuration for org mode
-(load-file (expand-file-name "~/.secrets/org.el"))
+;; (load-file (expand-file-name "~/.secrets/org.el"))
 (message "`init' file loaded")
   ;;;; Footer
 
