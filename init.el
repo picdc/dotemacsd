@@ -271,13 +271,13 @@ Enabling this leads to a bug where your completion may replace the following wor
   :type 'symbol
   :tag "󰔎 Dark/Light")
 
-(defcustom pokemacs-dark-theme 'doom-solarized-dark
+(defcustom pokemacs-dark-theme 'doom-nord
   "Dark theme to load."
   :group 'pokemacs-appearance
   :type 'symbol
   :tag "󰖔 Dark Theme")
 
-(defcustom pokemacs-light-theme 'doom-solarized-light
+(defcustom pokemacs-light-theme 'doom-nord-light
   "Light theme to load."
   :group 'pokemacs-appearance
   :type 'symbol
@@ -545,6 +545,7 @@ Enabling this leads to a bug where your completion may replace the following wor
   (add-to-list 'auto-mode-alist '("\\.in\\'" . text-mode))
   (add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
   (add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode)))
+(add-to-list 'auto-mode-alist '("\\.wast\\'" . lisp-mode))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -2299,6 +2300,7 @@ debian, and derivatives). On most it's 'fd'.")
   :hook ((lsp-mode . pokemacs-lsp-optimization-mode)
          (lsp-mode . pokemacs-define-correct-key)
          (lsp-completion-mode . minad/lsp-mode-setup-completion)
+         (bash-ts-mode . lsp-deferred)
          (caml-mode . lsp-deferred)
          (cc-mode . lsp-deferred)
          (clojure-mode . lsp-deferred)
@@ -2308,8 +2310,11 @@ debian, and derivatives). On most it's 'fd'.")
          (elm-mode . lsp-deferred)
          (enh-ruby-mode . lsp-deferred)
          (fsharp-mode . lsp-deferred)
+         (js-mode . lsp-deferred)
+         (js-ts-mode . lsp-deferred)
          (kotlin-mode . lsp-deferred)
-         (rustic-mode . pokemacs--setup-and-run-lsp)
+         (rustic-mode . lsp-deferred)
+         (typescript-ts-mode . lsp-deferred)
          (tuareg-mode . lsp-deferred)
          (zig-mode    . lsp-deferred)
          (zig-ts-mode    . lsp-deferred))
@@ -4942,6 +4947,10 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
     ;; (defun my/rust-mode-outline-regexp-setup ()
     ;;   (setq-local outline-regexp "///[;]\\{1,8\\}[^ \t]"))
     (message "`rustic' loaded")))
+
+(use-package csv-mode
+  :demand t
+  :ensure t)
 
 (when use-sicp
   (use-package sicp))
