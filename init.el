@@ -161,6 +161,26 @@
   :group 'mdrp-packages
   :type 'symbol)
 
+(defcustom use-michelson t
+"If non-nil, uses the michelson mode"
+:group 'mdrp-packages
+:type 'boolean)
+
+(defcustom use-solaire t
+"If non-nil, uses the solaire package"
+:group 'mdrp-packages
+:type 'boolean)
+
+(defcustom use-window-purpose t
+"If non-nil, uses the window-purpose package"
+:group 'mdrp-packages
+:type 'boolean)
+
+(defcustom use-rainbow nil
+"If non-nil, uses the rainbow package"
+:group 'mdrp-packages
+:type 'boolean)
+
 (setq user-init-file (or load-file-name (buffer-file-name)))
 (setq user-emacs-directory (file-name-directory user-init-file))
 
@@ -199,7 +219,7 @@
 (setq gc-cons-threshold better-gc-cons-threshold)
 (setq gc-cons-percentage 0.5)
 (run-with-idle-timer 5 t #'garbage-collect)
-(setq garbage-collection-messages t)
+(setq garbage-collection-messages nil)
 
 (defun update-to-load-path (folder)
   "Update FOLDER and its subdirectories to `load-path'."
@@ -315,6 +335,7 @@
 (add-to-list 'auto-mode-alist '("\\.in\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode))
+(add-to-list 'auto-mode-alist '("\\.wast\\'" . lisp-mode))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -340,6 +361,11 @@
   (require 'bind-key))
 
 (use-package use-package-ensure-system-package :ensure t)
+
+(use-package quelpa-use-package
+  :ensure t
+  :init (setq quelpa-update-melpa-p nil)
+  :config (quelpa-use-package-activate-advice))
 
 (use-package auto-package-update
   :ensure t
@@ -716,19 +742,19 @@ debian, and derivatives). On most it's 'fd'.")
   (global-set-key [remap kill-ring-save] #'easy-kill)
   (global-set-key [remap mark-sexp] #'easy-mark))
 
-(use-package flycheck-languagetool
-  :load-path "lisp/flycheck-languagetool/"
-  ;; :custom ((flycheck-languagetool-active-modes
-  ;;           '(text-mode latex-mode org-mode markdown-mode message-mode prog-mode)))
-  :hook ((text-mode . flycheck-languagetool-setup)
-         (lsp-mode . (lambda () (lsp-diagnostics-mode 1)
-                       (require 'flycheck-languagetool)
-                       (flycheck-languagetool-flycheck-enable))))
-  ;; :ensure-system-package
-  ;;   ("LanguageTool-5.9-stable/languagetool-commandline.jar" . "curl -L https://raw.githubusercontent.com/languagetool-org/languagetool/master/install.sh | sudo bash -a")
-  :init
-  (setq flycheck-languagetool-server-jar (expand-file-name "~/.emacs.d/LanguageTool-5.9-stable/languagetool-server.jar"))
-  )
+;; (use-package flycheck-languagetool
+;;   :load-path "lisp/flycheck-languagetool/"
+;;   ;; :custom ((flycheck-languagetool-active-modes
+;;   ;;           '(text-mode latex-mode org-mode markdown-mode message-mode prog-mode)))
+;;   :hook ((text-mode . flycheck-languagetool-setup)
+;;          (lsp-mode . (lambda () (lsp-diagnostics-mode 1)
+;;                        (require 'flycheck-languagetool)
+;;                        (flycheck-languagetool-flycheck-enable))))
+;;   ;; :ensure-system-package
+;;   ;;   ("LanguageTool-5.9-stable/languagetool-commandline.jar" . "curl -L https://raw.githubusercontent.com/languagetool-org/languagetool/master/install.sh | sudo bash -a")
+;;   :init
+;;   (setq flycheck-languagetool-server-jar (expand-file-name "~/.emacs.d/LanguageTool-5.9-stable/languagetool-server.jar"))
+;;   )
 
 (use-package flyspell
   :init
@@ -1271,7 +1297,6 @@ have one rule for each file type."
     (visual-fill-column-width 100)
     (visual-fill-column-center-text t)
     :config
-
     (defun mdrp/visual-fill-one-window ()
       (global-visual-fill-column-mode -1)
       (if (window-full-width-p)
@@ -2239,7 +2264,6 @@ have one rule for each file type."
    )
   :general
   ("M-o" 'mdrp-org-map)
-  ("C-x C-p" 'mdrp/org-compile-latex-and-update-other-buffer)
   (:keymaps 'mdrp-org-map
             "l"                       'org-store-link
             "a"                       'org-agenda
@@ -2265,7 +2289,7 @@ have one rule for each file type."
     )
   (customize-set-value 'org-latex-with-hyperref nil)
   (add-to-list 'org-latex-default-packages-alist "\\PassOptionsToPackage{hyphens}{url}")
-  (add-to-list 'org-export-filter-timestamp-functions #'mdrp/filter-timestamp)
+  ;; (add-to-list 'org-export-filter-timestamp-functions #'mdrp/filter-timestamp)
   (setq org-image-actual-width nil)
   (defun org-mode-<>-syntax-fix (start end)
     "Change syntax of characters ?< and ?> to symbol within source code blocks."
@@ -2701,6 +2725,10 @@ have one rule for each file type."
   :hook
   (tree-sitter-after-on . ts-fold-indicators-mode)
   )
+
+(use-package treesit
+  :config
+  (setq treesit-extra-load-path '("~/.emacs.d/tree-sitter-modules")))
 
 (use-package conf-mode
   :ensure nil
@@ -3167,6 +3195,8 @@ have one rule for each file type."
 
     (when refmt-bin
       (setq refmt-command refmt-bin)))
+
+  (use-package merlin :ensure t)
 
   (use-package reason-mode
     :ensure t

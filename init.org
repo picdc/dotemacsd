@@ -266,7 +266,7 @@ Literate configuration for init.el.
   (setq byte-compile-warnings '(cl-functions))
 #+END_SRC
 
-** Disable/Enable features
+** TODO Disable/Enable features
 :PROPERTIES:
 :CUSTOM_ID: disableenable-features
 :END:
@@ -414,6 +414,26 @@ This is a list of custom variables that allow to enable/disable features. If you
     :group 'mdrp-packages
     :type 'symbol)
 
+  (defcustom use-michelson t
+  "If non-nil, uses the michelson mode"
+  :group 'mdrp-packages
+  :type 'boolean)
+
+  (defcustom use-solaire t
+  "If non-nil, uses the solaire package"
+  :group 'mdrp-packages
+  :type 'boolean)
+
+  (defcustom use-window-purpose t
+  "If non-nil, uses the window-purpose package"
+  :group 'mdrp-packages
+  :type 'boolean)
+
+  (defcustom use-rainbow nil
+  "If non-nil, uses the rainbow package"
+  :group 'mdrp-packages
+  :type 'boolean)
+
 #+END_SRC
 
 ** Set useful variables
@@ -501,7 +521,7 @@ If you experience stuttering, increase this.
   (setq gc-cons-threshold better-gc-cons-threshold)
   (setq gc-cons-percentage 0.5)
   (run-with-idle-timer 5 t #'garbage-collect)
-  (setq garbage-collection-messages t)
+  (setq garbage-collection-messages nil)
 #+END_SRC
 
 ** Load functions
@@ -716,9 +736,10 @@ Since this is highly user dependent (I see you @thriim), the variable ~show-pare
 :END:
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'auto-mode-alist '("\\.in\\'" . text-mode))
-(add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
-(add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode))
+  (add-to-list 'auto-mode-alist '("\\.in\\'" . text-mode))
+  (add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
+  (add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode))
+  (add-to-list 'auto-mode-alist '("\\.wast\\'" . lisp-mode))
 #+END_SRC
 
 ** Delete whitespace
@@ -775,6 +796,13 @@ Will be used to download non-emacs packages needed by emacs packages
 
 #+BEGIN_SRC emacs-lisp
   (use-package use-package-ensure-system-package :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package quelpa-use-package
+    :ensure t
+    :init (setq quelpa-update-melpa-p nil)
+    :config (quelpa-use-package-activate-advice))
 #+END_SRC
 
 ** Auto update packages
@@ -1413,19 +1441,19 @@ Better ~M-w~
 :END:
 
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck-languagetool
-    :load-path "lisp/flycheck-languagetool/"
-    ;; :custom ((flycheck-languagetool-active-modes
-    ;;           '(text-mode latex-mode org-mode markdown-mode message-mode prog-mode)))
-    :hook ((text-mode . flycheck-languagetool-setup)
-           (lsp-mode . (lambda () (lsp-diagnostics-mode 1)
-                         (require 'flycheck-languagetool)
-                         (flycheck-languagetool-flycheck-enable))))
-    ;; :ensure-system-package
-    ;;   ("LanguageTool-5.9-stable/languagetool-commandline.jar" . "curl -L https://raw.githubusercontent.com/languagetool-org/languagetool/master/install.sh | sudo bash -a")
-    :init
-    (setq flycheck-languagetool-server-jar (expand-file-name "~/.emacs.d/LanguageTool-5.9-stable/languagetool-server.jar"))
-    )
+  ;; (use-package flycheck-languagetool
+  ;;   :load-path "lisp/flycheck-languagetool/"
+  ;;   ;; :custom ((flycheck-languagetool-active-modes
+  ;;   ;;           '(text-mode latex-mode org-mode markdown-mode message-mode prog-mode)))
+  ;;   :hook ((text-mode . flycheck-languagetool-setup)
+  ;;          (lsp-mode . (lambda () (lsp-diagnostics-mode 1)
+  ;;                        (require 'flycheck-languagetool)
+  ;;                        (flycheck-languagetool-flycheck-enable))))
+  ;;   ;; :ensure-system-package
+  ;;   ;;   ("LanguageTool-5.9-stable/languagetool-commandline.jar" . "curl -L https://raw.githubusercontent.com/languagetool-org/languagetool/master/install.sh | sudo bash -a")
+  ;;   :init
+  ;;   (setq flycheck-languagetool-server-jar (expand-file-name "~/.emacs.d/LanguageTool-5.9-stable/languagetool-server.jar"))
+  ;;   )
 #+END_SRC
 
 *** [[https://www.emacswiki.org/emacs/FlySpell][Flyspell]]
@@ -2325,7 +2353,6 @@ This mode will center the text when only one window is displayed.
       (visual-fill-column-width 100)
       (visual-fill-column-center-text t)
       :config
-
       (defun mdrp/visual-fill-one-window ()
         (global-visual-fill-column-mode -1)
         (if (window-full-width-p)
@@ -3569,11 +3596,12 @@ Will pulse when the focus changes to show where the cursor is.
 
 Org mode is, well, org mode.
 
-** Main mode
+** VERIFYING Main mode
 :PROPERTIES:
 :CUSTOM_ID: main-mode
 :END:
 
+- State "VERIFYING"  from              [2022-11-24 Thu 10:23]
 #+BEGIN_SRC emacs-lisp
   (require 'org-protocol)
   (require 'ox)
@@ -3674,7 +3702,6 @@ Org mode is, well, org mode.
      )
     :general
     ("M-o" 'mdrp-org-map)
-    ("C-x C-p" 'mdrp/org-compile-latex-and-update-other-buffer)
     (:keymaps 'mdrp-org-map
               "l"                       'org-store-link
               "a"                       'org-agenda
@@ -3700,7 +3727,7 @@ Org mode is, well, org mode.
       )
     (customize-set-value 'org-latex-with-hyperref nil)
     (add-to-list 'org-latex-default-packages-alist "\\PassOptionsToPackage{hyphens}{url}")
-    (add-to-list 'org-export-filter-timestamp-functions #'mdrp/filter-timestamp)
+    ;; (add-to-list 'org-export-filter-timestamp-functions #'mdrp/filter-timestamp)
     (setq org-image-actual-width nil)
     (defun org-mode-<>-syntax-fix (start end)
       "Change syntax of characters ?< and ?> to symbol within source code blocks."
@@ -4305,6 +4332,19 @@ Code folding based on tree-sitter tree.
     )
 
 #+END_SRC
+
+** Native (unstable)
+:PROPERTIES:
+:CUSTOM_ID: tree-sitter-native
+:END:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package treesit
+    :config
+    (setq treesit-extra-load-path '("~/.emacs.d/tree-sitter-modules")))
+
+#+END_SRC
+
 
 * Programming languages
 :PROPERTIES:
@@ -4986,40 +5026,42 @@ Read the docs for the different variables set in the config.
 Some people use this, not my responsibility.
 
 #+BEGIN_SRC emacs-lisp
-(when use-reason
-  (defun shell-cmd (cmd)
-    "Returns the stdout output of a shell command or nil if the command returned
-   an error"
-    (car (ignore-errors (apply 'process-lines (split-string cmd)))))
+  (when use-reason
+    (defun shell-cmd (cmd)
+      "Returns the stdout output of a shell command or nil if the command returned
+     an error"
+      (car (ignore-errors (apply 'process-lines (split-string cmd)))))
 
-  (defun reason-cmd-where (cmd)
-    (let ((where (shell-cmd cmd)))
-      (if (not (string-equal "unknown flag ----where" where))
-          where)))
+    (defun reason-cmd-where (cmd)
+      (let ((where (shell-cmd cmd)))
+        (if (not (string-equal "unknown flag ----where" where))
+            where)))
 
-  (let* ((refmt-bin (or (reason-cmd-where "refmt ----where")
-                        (shell-cmd "which refmt")
-                        (shell-cmd "which bsrefmt")))
-         (merlin-bin (or (reason-cmd-where "ocamlmerlin ----where")
-                         (shell-cmd "which ocamlmerlin")))
-         (merlin-base-dir (when merlin-bin
-                            (replace-regexp-in-string "bin/ocamlmerlin$" "" merlin-bin))))
-    ;; Add merlin.el to the emacs load path and tell emacs where to find ocamlmerlin
-    (when merlin-bin
-      (add-to-list 'load-path (concat merlin-base-dir "share/emacs/site-lisp/"))
-      (setq merlin-command merlin-bin))
+    (let* ((refmt-bin (or (reason-cmd-where "refmt ----where")
+                          (shell-cmd "which refmt")
+                          (shell-cmd "which bsrefmt")))
+           (merlin-bin (or (reason-cmd-where "ocamlmerlin ----where")
+                           (shell-cmd "which ocamlmerlin")))
+           (merlin-base-dir (when merlin-bin
+                              (replace-regexp-in-string "bin/ocamlmerlin$" "" merlin-bin))))
+      ;; Add merlin.el to the emacs load path and tell emacs where to find ocamlmerlin
+      (when merlin-bin
+        (add-to-list 'load-path (concat merlin-base-dir "share/emacs/site-lisp/"))
+        (setq merlin-command merlin-bin))
 
-    (when refmt-bin
-      (setq refmt-command refmt-bin)))
+      (when refmt-bin
+        (setq refmt-command refmt-bin)))
 
-  (use-package reason-mode
-    :ensure t
-    :config
-    (add-hook
-     'reason-mode-hook
-     (lambda ()
-       (add-hook 'before-save-hook 'refmt-before-save)
-       (merlin-mode)))))
+    (use-package merlin :ensure t)
+
+    (use-package reason-mode
+      :ensure t
+      :config
+      (add-hook
+       'reason-mode-hook
+       (lambda ()
+         (add-hook 'before-save-hook 'refmt-before-save)
+         (merlin-mode)))))
 #+END_SRC
 
 ** [[https://github.com/rust-lang/rust-mode][Rust]]
