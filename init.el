@@ -217,13 +217,13 @@
   :type 'boolean
   :tag "󰔎 Dark/Light")
 
-(defcustom pokemacs-dark-theme 'doom-solarized-dark
+(defcustom pokemacs-dark-theme 'doom-nord
   "Dark theme to load."
   :group 'pokemacs-appearance
   :type 'symbol
   :tag "󰖔 Dark Theme")
 
-(defcustom pokemacs-light-theme 'doom-solarized-light
+(defcustom pokemacs-light-theme 'doom-nord-light
   "Light theme to load."
   :group 'pokemacs-appearance
   :type 'symbol
@@ -524,8 +524,9 @@
 (add-to-list 'auto-mode-alist '("\\.in\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.out\\'" . text-mode))
 (add-to-list 'auto-mode-alist '("\\.args\\'" . text-mode))
+(add-to-list 'auto-mode-alist '("\\.wast\\'" . lisp-mode))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package auto-package-update
   :custom
@@ -1778,9 +1779,12 @@ debian, and derivatives). On most it's 'fd'.")
          (clojurec-mode-hook . lsp-deferred)
          (elm-mode . lsp-deferred)
          (fsharp-mode . lsp-deferred)
+         (js-mode . lsp-deferred)
+         (js-ts-mode . lsp-deferred)
          (kotlin-mode . lsp-deferred)
          (enh-ruby-mode . lsp-deferred)
          (rustic-mode . lsp-deferred)
+         (typescript-ts-mode . lsp-deferred)
          (tuareg-mode . lsp-deferred))
   :general
   (:keymaps 'lsp-mode-map
@@ -1915,6 +1919,35 @@ debian, and derivatives). On most it's 'fd'.")
 
 (use-package consult-lsp
   :disabled)
+
+;; (defun lsp-booster--advice-json-parse (old-fn &rest args)
+;;   "Try to parse bytecode instead of json."
+;;   (or
+;;    (when (equal (following-char) ?#)
+;;      (let ((bytecode (read (current-buffer))))
+;;        (when (byte-code-function-p bytecode)
+;;          (funcall bytecode))))
+;;    (apply old-fn args)))
+;; (advice-add (if (progn (require 'json)
+;;                        (fboundp 'json-parse-buffer))
+;;                 'json-parse-buffer
+;;               'json-read)
+;;             :around
+;;             #'lsp-booster--advice-json-parse)
+
+;; (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+;;   "Prepend emacs-lsp-booster command to lsp CMD."
+;;   (let ((orig-result (funcall old-fn cmd test?)))
+;;     (if (and (not test?)                             ;; for check lsp-server-present?
+;;              (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+;;              lsp-use-plists
+;;              (not (functionp 'json-rpc-connection))  ;; native json-rpc
+;;              (executable-find "emacs-lsp-booster"))
+;;         (progn
+;;           (message "Using emacs-lsp-booster for %s!" orig-result)
+;;           (cons "emacs-lsp-booster" orig-result))
+;;       orig-result)))
+;; (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 
 (use-package prog-mode
   :ensure nil
@@ -2632,7 +2665,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-auto t)                 ;; Enable auto completion
   (corfu-quit-no-match t)
-  (corfu-auto-prefix 1)
+  (corfu-auto-prefix 2)
   (corfu-auto-delay 0)
   (corfu-separator ?\s)
   ;; (corfu-quit-at-boundary nil)
@@ -4098,7 +4131,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
               "C-c c" 'seeing-is-believing-clear)))
 
 (when use-rust
-
   (use-package rust-mode
     :demand t
     :ensure t
@@ -4122,6 +4154,13 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
               "C-M-;" 'pokemacs-rust-doc-comment-dwim-following
               "C-M-," 'pokemacs-rust-doc-comment-dwim-enclosing)
     :init
+    ;;(let* ((mode '("\\.rs\\'" . rust-mode))
+    ;;       (mode-ts '("\\.rs\\'" . rust-ts-mode)))
+    ;;  (when (member mode auto-mode-alist)
+    ;;    (setq auto-mode-alist (remove mode auto-mode-alist)))
+    ;;  (when (member mode-ts auto-mode-alist)
+    ;;    (setq auto-mode-alist (remove mode-ts auto-mode-alist))))
+
     (defun pokemacs-rust-doc-comment-dwim (c)
       "Comment or uncomment the current line or text selection."
       (interactive)
@@ -4219,6 +4258,8 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
     ;; (defun my/rust-mode-outline-regexp-setup ()
     ;;   (setq-local outline-regexp "///[;]\\{1,8\\}[^ \t]"))
     (message "`rustic' loaded")))
+
+(use-package csv-mode)
 
 (when use-sicp
   (use-package sicp))
