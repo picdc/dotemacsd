@@ -1,11 +1,11 @@
-;;; mdrp-tree-sitter.el --- -*- lexical-binding: t -*-
+;;; mdrp-solaire.el --- -*- lexical-binding: t -*-
 
 ;; Copyright (c) 2020-2020 mdrp and contributors.
 
 ;; Author: mdrp
 ;; Maintainer: mdrp <https://github.com/mattiasdrp>
 ;; Version: 1.0
-;; Licence: GPL2+
+;; Licence: MIT
 ;; Keywords: convenience, configuration
 
 ;;; License:
@@ -23,36 +23,14 @@
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <http://www.gnu.visual-fill/licenses/>.
 
 ;;; Commentary:
 
 ;;; Code:
 
-(use-package tree-sitter-langs
-  :ensure t)
+(use-package solaire-mode)
 
-(use-package tree-sitter
-  :ensure t
-  :config
-  (global-tree-sitter-mode)
-  ;; :hook
-  ;; (tuareg-mode . tree-sitter-mode)
-  ;; (python-mode . tree-sitter-mode)
-)
+(solaire-global-mode +1)
 
-;; (use-package tree-sitter-fold
-;;   :load-path "custom/tree-sitter-fold/"
-;;   )
-
-;; (use-package ts-fold
-;;   :load-path "custom/ts-fold/"
-;;   )
-
-;; (use-package ts-fold-indicators
-;;   :load-path "custom/ts-fold/"
-;;   )
-
-(provide 'mdrp-tree-sitter)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; mdrp-tree-sitter.el ends here
+(provide 'mdrp-solaire)

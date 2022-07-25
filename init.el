@@ -27,7 +27,6 @@
 
 ;;; Commentary:
 
-
 ;;; Code:
 
 ;;;; A BIG BUNCH OF CUSTOM OPTIONS
@@ -37,8 +36,8 @@
 (setq user-init-file (or load-file-name (buffer-file-name)))
 (setq user-emacs-directory (file-name-directory user-init-file))
 
-(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;;;;; From MatthewZMD
 
@@ -151,7 +150,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'mdrp-selected)
 
-(require 'mdrp-god-mode)
+;; (require 'mdrp-god-mode)
 
 ;;- KEYBINDINGS
 
@@ -182,9 +181,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'mdrp-ansi-color)
 
-(require 'mdrp-rainbow-mode)
+;; (require 'mdrp-rainbow-mode)
 
-(require 'mdrp-rainbow-delimiters)
+;; (require 'mdrp-rainbow-delimiters)
 
 (require 'mdrp-theme)
 
@@ -196,9 +195,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'mdrp-ace-window)
 
-(require 'mdrp-spotify)
+;; (require 'mdrp-spotify)
 
-(require 'mdrp-visual-fill)
+;; (require 'mdrp-visual-fill)
 
 (require 'mdrp-pulsar)
 
@@ -249,9 +248,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 ;;;; ORG MODE
 
-(update-to-load-path (expand-file-name "elisp-configs/org" user-emacs-directory))
+;; (update-to-load-path (expand-file-name "elisp-configs/org" user-emacs-directory))
 
-(require 'mdrp-org)
+;; (require 'mdrp-org)
 
 ;;;; LANGUAGE SPECIFIC PACKAGES:
 
@@ -259,7 +258,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'mdrp-json)
 
-(require 'mdrp-latex)
+;; (require 'mdrp-latex)
 
 (require 'mdrp-rust)
 
@@ -284,6 +283,16 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (if (file-exists-p (concat user-emacs-directory "/custom/usuba-mode.el"))
     (require 'mdrp-usuba)
   )
+
+;; PIERRICK
+
+(require 'mdrp-reason) ;;hélas
+
+(require 'mdrp-michelson)
+
+(require 'mdrp-solaire)
+
+(require 'mdrp-window-purpose)
 
 ;;;; Footer
 

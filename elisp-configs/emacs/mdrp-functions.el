@@ -29,6 +29,16 @@
 
 ;;; Code:
 
+;; (defun mdrp/visual-fill-one-window ()
+;;   (global-visual-fill-column-mode -1)
+;;   (if (window-full-width-p)
+;;       (global-visual-fill-column-mode 1)
+;;     (global-visual-fill-column-mode -1)
+;;     )
+;;   )
+
+;; (add-hook 'window-state-change-hook 'mdrp/visual-fill-one-window)
+
 ;; Custom comment function a bit more clever
 ;; https://www.emacswiki.org/emacs/CommentingCode
 (defun mdrp/comment-eclipse (&optional arg)
@@ -253,6 +263,11 @@ DOCSTRING and BODY are as in `defun'.
 ;;;###autoload
 (defun +ivy-yas-prompt-fn (prompt choices &optional display-fn)
   (yas-completing-prompt prompt choices display-fn #'ivy-completing-read))
+
+(defun opam-env ()
+  (interactive nil)
+  (dolist (var (car (read-from-string (shell-command-to-string "opam config env --sexp"))))
+    (setenv (car var) (cadr var))))
 
 (provide 'mdrp-functions)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

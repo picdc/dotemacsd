@@ -29,6 +29,7 @@
 
 ;;; Code:
 
+;;Emacs-client only
 (require 'server)
 (unless (server-running-p) (server-start))
 
@@ -122,6 +123,7 @@
  comment-style 'indent
  ansi-color-names-vector ["#424242" "#EF9A9A" "#C5E1A5" "#FFEE58" "#64B5F6" "#E1BEE7" "#80DEEA" "#E0E0E0"]
  enable-recursive-minibuffers t
+ electric-indent-mode nil
  scroll-bar-mode nil
  sentence-end-double-space nil
  show-paren-delay 0
@@ -171,6 +173,7 @@
 ;; Replace selection on insert
 (delete-selection-mode t)
 (savehist-mode t)
+(global-auto-revert-mode t)
 
 ;; So Long mitigates slowness due to extremely long lines.
 ;; Currently available in Emacs master branch *only*!
@@ -198,6 +201,20 @@
 (global-set-key [remap query-replace-regexp] 'anzu-query-replace-regexp)
 (define-key isearch-mode-map [remap isearch-query-replace]  #'anzu-isearch-query-replace)
 (define-key isearch-mode-map [remap isearch-query-replace-regexp] #'anzu-isearch-query-replace-regexp)
+
+;; Split window vertically when possible instead of horizontally
+(defun my-split-window-sensibly (&optional window)
+  "replacement `split-window-sensibly' function which prefers vertical splits"
+  (interactive)
+  (let ((window (or window (selected-window))))
+    (or (and (window-splittable-p window t)
+             (with-selected-window window
+               (split-window-right)))
+        (and (window-splittable-p window)
+             (with-selected-window window
+               (split-window-below))))))
+
+(setq split-window-preferred-function #'my-split-window-sensibly)
 
 (provide 'mdrp-global-config)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

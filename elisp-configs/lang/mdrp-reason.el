@@ -29,7 +29,6 @@
 
 ;;; Code:
 
-(when use-reason
   (defun shell-cmd (cmd)
     "Returns the stdout output of a shell command or nil if the command returned
    an error"
@@ -64,7 +63,6 @@
        (add-hook 'before-save-hook 'refmt-before-save)
        (merlin-mode)))
     )
-  )
 
 (provide 'mdrp-reason)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

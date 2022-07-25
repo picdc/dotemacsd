@@ -37,7 +37,7 @@
            :map rust-mode-map
            ("C-M-;"                   . rust-doc-comment-dwim-following)
            ("C-M-,"                   . rust-doc-comment-dwim-enclosing)
-           ("C-c C-t"                 . racer-find-definition)
+           ;; ("C-c C-t"                 . racer-find-definition)
            )
 
     :config

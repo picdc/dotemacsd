@@ -13,23 +13,27 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
+ '(confirm-kill-emacs 'y-or-n-p)
+ '(custom-safe-themes
+   '("d74c5485d42ca4b7f3092e50db687600d0e16006d8fa335c69cf4f379dbd0eee" "0fe24de6d37ea5a7724c56f0bb01efcbb3fe999a6e461ec1392f3c3b105cc5ac" "2c49d6ac8c0bf19648c9d2eabec9b246d46cb94d83713eaae4f26b49a8183fc4" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" "aaa4c36ce00e572784d424554dcc9641c82d1155370770e231e10c649b59a074" default))
  '(describe-char-unidata-list
    '(name old-name general-category decomposition decimal-digit-value digit-value numeric-value))
  '(electric-indent-mode t)
  '(org-export-backends '(ascii html icalendar latex md odt pandoc))
  '(package-selected-packages
-   '(counsel-spotify cheatsheet keycast git-timemachine pulsar auto-package-update restart-emacs diff-hl magit-todos lsp-docker hide-mode-line async ghub anzu command-log-mode python-mode yapfify pyvenv lsp-pyright pyenv-mode dap-mode apheleia org-pdftools org-appear xr org-inline-pdf pandoc ox-gfm markdown-preview-mode dune-format abbrev ace-window all-the-icons all-the-icons-dired all-the-icons-ivy all-the-icons-ivy-rich amx auctex auctex-latexmk auto-complete auto-complete-auctex calfw calfw-org caml-debug caml-mode cargo cdlatex company-auctex company-box company-math company-prescient company-quickhelp company-racer company-web counsel counsel-projectile crux cubicle-mode dash dash-functional delight dictionary diminish discover-my-major doom-modeline doom-themes dumb-jump dune dune-mode elm-mode flycheck flycheck-inline flycheck-rust flyspell-correct flyspell-correct-ivy flyspell-correct-popup fsharp-mode general git-commit git-messenger gitignore-mode god-mode helpful highlight-indent-guides ivy-avy ivy-bibtex ivy-posframe ivy-prescient ivy-rich json-mode LaTeX-math-mode lsp-ivy lsp-mode lsp-treemacs lsp-ui magit merlin-mode minions multiple-cursors nlinum no-littering ob-rust org-bullets org-make-toc org-plus-contrib org-present org-protocol org-ref org-super-agenda outline-minor-faces outshine ox-pandoc pandoc-mode pdf-tools php-mode pretty-outlines projectile quick-peek racer rainbow-delimiters rainbow-mode ripgrep rotate run-ocaml rust-mode saveplace-pdf-view selected separedit smex sort-words tex-site toml-mode treemacs treemacs-all-the-icons treemacs-icons-dired treemacs-magit treemacs-projectile undo-tree unfill use-package use-package-ensure-system-package utop visual-fill-column vlf web-mode wgrep which-key why3-mode ws-butler yaml-mode yasnippet z3-mode zzz-to-char))
+   '(reason-mode window-purpose counsel-spotify cheatsheet keycast git-timemachine pulsar auto-package-update restart-emacs diff-hl magit-todos lsp-docker hide-mode-line async ghub anzu command-log-mode python-mode yapfify pyvenv lsp-pyright pyenv-mode dap-mode apheleia org-pdftools org-appear xr org-inline-pdf pandoc ox-gfm markdown-preview-mode dune-format abbrev ace-window all-the-icons all-the-icons-dired all-the-icons-ivy all-the-icons-ivy-rich amx auctex auctex-latexmk auto-complete auto-complete-auctex calfw calfw-org caml-debug caml-mode cargo cdlatex company-auctex company-box company-math company-prescient company-quickhelp company-racer company-web counsel counsel-projectile crux cubicle-mode dash dash-functional delight dictionary diminish discover-my-major doom-modeline doom-themes dumb-jump dune dune-mode elm-mode flycheck flycheck-inline flycheck-rust flyspell-correct flyspell-correct-ivy flyspell-correct-popup fsharp-mode general git-commit git-messenger gitignore-mode god-mode helpful highlight-indent-guides ivy-avy ivy-bibtex ivy-posframe ivy-prescient ivy-rich json-mode LaTeX-math-mode lsp-ivy lsp-mode lsp-treemacs lsp-ui magit merlin-mode minions multiple-cursors nlinum no-littering ob-rust org-bullets org-make-toc org-plus-contrib org-present org-protocol org-ref org-super-agenda outline-minor-faces outshine ox-pandoc pandoc-mode pdf-tools php-mode pretty-outlines projectile quick-peek racer rainbow-delimiters rainbow-mode ripgrep rotate run-ocaml rust-mode saveplace-pdf-view selected separedit smex sort-words tex-site toml-mode treemacs treemacs-all-the-icons treemacs-icons-dired treemacs-magit treemacs-projectile undo-tree unfill use-package use-package-ensure-system-package utop visual-fill-column vlf web-mode wgrep which-key why3-mode ws-butler yaml-mode yasnippet z3-mode zzz-to-char))
+ '(refmt-show-errors 'echo)
 
  ;; Doom modeline config
  '(doom-modeline-bar-width 4)
- '(doom-modeline-height 25)
+ '(doom-modeline-height 15)
  ;;- Doom modeline config
 
  ;; Choose between:
  ;;  - 'parenthesis:  show the matching paren
  ;;  - 'expression: show the entire expression enclosed by the paren
  ;;  - 'mixed: show the matching paren if it is visible, and the expression otherwise
- '(show-paren-style 'expression)
+ '(show-paren-style 'mixed)
 
  ;; Enable or disable functionalities
  '(use-company t)
@@ -50,20 +54,25 @@
  '(use-vertical-split nil)
  '(use-visual-fill t)
  '(use-web t)
- '(warning-suppress-log-types '((comp) (comp)))
- '(warning-suppress-types '((comp))))
+ '(warning-suppress-log-types '((emacs) (emacs) (comp)))
+ '(warning-suppress-types '((emacs) (comp))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Code" :slant normal :weight normal :height 136 :width normal :foundry "CTDB"))))
- '(fixed-pitch ((t (:family "Fira Code" :slant normal :weight normal :height 136 :width normal :foundry "CTDB"))))
+ '(default ((t (:family "Fira Code Medium" :slant normal :weight medium :height 90 :width normal :foundry "CTDB"))))
+ '(fixed-pitch ((t (:family "Fira Code" :slant normal :weight normal :height 90 :width normal :foundry "CTDB"))))
+ '(font-latex-sedate-face ((t (:foreground "#859900"))))
+ '(font-lock-builtin-face ((t (:foreground "#839496" :slant normal :weight normal))))
+ '(font-lock-constant-face ((t (:foreground "#2aa198" :weight normal))))
+ '(font-lock-doc-face ((t (:foreground "#eee8d5" :slant normal))))
+ '(font-lock-keyword-face ((t (:foreground "#859900" :weight normal))))
  '(lsp-lens-face ((t (:family "Fira Code" :foundry "CTDB" :inherit lsp-details-face))))
  '(menu ((t (:inherit mode-line))))
- '(mode-line ((nil :family "Fira Code" :height 140)))
- '(mode-line-inactive ((nil :family "Fira Code" :height 140)))
+ '(mode-line ((nil :family "Fira Code" :height 110)))
+ '(mode-line-inactive ((nil :family "Fira Code" :height 110)))
  '(org-block ((t (:inherit fixed-pitch))))
  '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
  '(org-document-title ((t (:inherit variable-pitch :height 1.4 :weight bold :foreground "#c678dd"))))
@@ -79,8 +88,63 @@
  '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold))))
  '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
- '(show-paren-match ((t (:background "sienna" :weight normal))))
- '(variable-pitch ((t (:family "Ubuntu" :height 136 :weight thin)))))
+ '(show-paren-match ((t (:background nil :weight normal))))
+;; tree-sitter-hl-face:attribute
+;; tree-sitter-hl-face:comment
+;; tree-sitter-hl-face:constant
+;; tree-sitter-hl-face:constant.builtin
+;; tree-sitter-hl-face:constructor
+;; tree-sitter-hl-face:doc
+;; tree-sitter-hl-face:embedded
+;; tree-sitter-hl-face:escape
+;; tree-sitter-hl-face:function
+;; tree-sitter-hl-face:function.builtin
+;; tree-sitter-hl-face:function.call
+;; tree-sitter-hl-face:function.macro
+;; tree-sitter-hl-face:function.special
+;; tree-sitter-hl-face:keyword
+;; tree-sitter-hl-face:label
+;; tree-sitter-hl-face:method
+;; tree-sitter-hl-face:method.call
+;; tree-sitter-hl-face:number
+;; tree-sitter-hl-face:operator
+;; tree-sitter-hl-face:property
+;; tree-sitter-hl-face:property.definition
+;; tree-sitter-hl-face:punctuation
+;; tree-sitter-hl-face:punctuation.bracket
+;; tree-sitter-hl-face:punctuation.delimiter
+;; tree-sitter-hl-face:punctuation.special
+;; tree-sitter-hl-face:string
+;; tree-sitter-hl-face:string.special
+;; tree-sitter-hl-face:tag
+;; tree-sitter-hl-face:type
+;; tree-sitter-hl-face:type.argument
+;; tree-sitter-hl-face:type.builtin
+;; tree-sitter-hl-face:type.parameter
+;; tree-sitter-hl-face:type.super
+;; tree-sitter-hl-face:variable
+;; tree-sitter-hl-face:variable.builtin
+;; tree-sitter-hl-face:variable.parameter
+;; tree-sitter-hl-face:variable.special
+
+
+;;  tuareg-font-double-colon-face
+;; tuareg-font-lock-attribute-face
+;; tuareg-font-lock-constructor-face
+;; tuareg-font-lock-error-face
+;; tuareg-font-lock-extension-node-face
+;; tuareg-font-lock-governing-face
+;; tuareg-font-lock-infix-extension-node-face
+;; tuareg-font-lock-interactive-directive-face
+;; tuareg-font-lock-interactive-error-face
+;; tuareg-font-lock-interactive-output-face
+;; tuareg-font-lock-label-face
+;; tuareg-font-lock-line-number-face
+;; tuareg-font-lock-module-face
+;; tuareg-font-lock-multistage-face
+;; tuareg-font-lock-operator-face
+ '(region ((t (:extend t :background "#93a1a1" :foreground "#073642" :inverse-video t))))
+'(variable-pitch ((t (:family "Ubuntu" :height 136 :weight thin)))))
 
 (provide 'custom)
 ;;; custom.el ends here

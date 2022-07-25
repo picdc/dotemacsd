@@ -48,12 +48,12 @@
         )
   )
 
-(use-package magit-todos
-  :ensure t
-  :config
-  (setq magit-todos-keywords-list (-mapcat (lambda (assoc) (list (car assoc))) hl-todo-keyword-faces))
-  :hook
-  (magit-mode . magit-todos-mode))
+;; (use-package magit-todos
+;;   :ensure t
+;;   :config
+;;   (setq magit-todos-keywords-list (-mapcat (lambda (assoc) (list (car assoc))) hl-todo-keyword-faces))
+;;   :hook
+;;   (magit-mode . magit-todos-mode))
 
 (use-package diff-hl
   :custom
@@ -79,6 +79,11 @@
   :mode (("/\\.gitignore\\'"      . gitignore-mode)
          ("/info/exclude\\'"      . gitignore-mode)
          ("/git/ignore\\'"        . gitignore-mode)))
+
+;; (use-package forge
+;;   :after magit)
+
+(setq auth-sources '("~/.authinfo"))
 
 (provide 'mdrp-git)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
