@@ -56,7 +56,7 @@
  '(lsp-auto-guess-root t)
  '(org-export-backends '(ascii html icalendar latex md odt pandoc))
  '(package-selected-packages
-   '(tree-sitter-langs quelpa lsp-pyright pdf-tools puni make-alert all-the-icons all-the-icons-dired anzu auctex auctex-latexmk auto-package-update calfw cargo cider clojure-mode company-quickhelp company-web consult-flycheck consult-yasnippet crux discover-my-major doom-themes dumb-jump dune easy-kill emojify flycheck-inline flycheck-languagetool flycheck-rust flyspell-correct fontify-face fringe-helper fsharp-mode general git-messenger git-timemachine hide-mode-line highlight-symbol hydra iedit ligature lispy lsp-ui magit-todos markdown-toc mixed-pitch multiple-cursors nlinum ob-rust ocp-indent org-appear org-auto-tangle org-bullets org-inline-pdf org-make-toc org-ref org-super-agenda outshine page-break-lines pandoc-mode paredit projectile pulsar pyvenv quick-peek rainbow-delimiters rainbow-mode reason-mode saveplace-pdf-view selected separedit solaire-mode svg-tag-mode tree-sitter tuareg use-package-ensure-system-package which-key yasnippet))
+   '(simple-httpd tree-sitter-langs quelpa lsp-pyright pdf-tools puni make-alert all-the-icons all-the-icons-dired anzu auctex auctex-latexmk auto-package-update calfw cargo cider clojure-mode company-quickhelp company-web consult-flycheck consult-yasnippet crux discover-my-major doom-themes dumb-jump dune easy-kill emojify flycheck-inline flycheck-languagetool flycheck-rust flyspell-correct fontify-face fringe-helper fsharp-mode general git-messenger git-timemachine hide-mode-line highlight-symbol hydra iedit ligature lispy lsp-ui magit-todos markdown-toc mixed-pitch multiple-cursors nlinum ob-rust ocp-indent org-appear org-auto-tangle org-bullets org-inline-pdf org-make-toc org-ref org-super-agenda outshine page-break-lines pandoc-mode paredit projectile pulsar pyvenv quick-peek rainbow-delimiters rainbow-mode reason-mode saveplace-pdf-view selected separedit solaire-mode svg-tag-mode tree-sitter tuareg use-package-ensure-system-package which-key yasnippet))
  '(refmt-show-errors 'echo)
  '(rustic-compile-directory-method 'rustic-buffer-workspace)
  '(safe-local-variable-values
@@ -80,7 +80,7 @@
  '(use-mu4e nil)
  '(use-ocaml t)
  '(use-org-agenda-startup nil)
- '(use-org-roam t)
+ '(use-org-roam nil)
  '(use-pandoc t)
  '(use-python t)
  '(use-rainbow nil)
