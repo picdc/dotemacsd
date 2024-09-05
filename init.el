@@ -404,14 +404,17 @@ or nil if you don't want to use an english dictionary"
  ;; Flash the screen
  visible-bell nil)
 
-(require 'server)
-(unless (server-running-p) (server-start))
+(use-package server
+  :ensure nil
+  :defer t
+  :config
+  (unless (server-running-p) (server-start))
+  (message "`server' loaded"))
 
 ;; Allows to repeat just one key to allow shorter key sequences
 (use-package repeat
   :ensure nil
-  :demand nil
-  :defer nil
+  :defer t
   :init (repeat-mode t)
   :config
   (setopt repeat-exit-timeout nil)
@@ -501,9 +504,8 @@ debian, and derivatives). On most it's 'fd'.")
   (message "`esup' loaded"))
 
 (use-package prescient
-  :init
-  (setq prescient-persist-mode 1)
   :defer t
+  :init (setq prescient-persist-mode 1)
   :config (message "`prescient' loaded"))
 
 (use-package savehist
@@ -522,15 +524,19 @@ debian, and derivatives). On most it's 'fd'.")
   (add-to-list 'recentf-exclude no-littering-etc-directory)
   (message "`savehist' loaded"))
 
-(when (and (eq system-type 'gnu/linux)
-           (string-match
-            "Linux.*Microsoft.*Linux"
-            (shell-command-to-string "uname -a")))
-  (eshell-command "xmodmap -e 'keycode 191 = space'")
-  (setq
-   browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
-   browse-url-generic-args     '("/c" "start")
-   browse-url-browser-function #'browse-url-generic))
+(defun mdrp/wsl-specific-function ()
+  "Change some values if running on WSL"
+  (when (and (eq system-type 'gnu/linux)
+             (string-match
+              "Linux.*Microsoft.*Linux"
+              (shell-command-to-string "uname -a")))
+    (eshell-command "xmodmap -e 'keycode 191 = space'")
+    (setq
+     browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
+     browse-url-generic-args     '("/c" "start")
+     browse-url-browser-function #'browse-url-generic)))
+
+(add-hook 'after-init-hook #'mdrp/wsl-specific-function)
 
 (unless mdrp/sys/win32
   (set-selection-coding-system 'utf-8)
@@ -544,8 +550,9 @@ debian, and derivatives). On most it's 'fd'.")
 (use-package all-the-icons
   :if (display-graphic-p)
   :config
-  (when use-all-the-icons (set-fontset-font t '(#xe3d0 . #xe909) "Material Icons"))
-  (set-fontset-font t '(#xe3d0 . #xe3d9) "Material Icons")
+  (when use-all-the-icons
+    (set-fontset-font t '(#xe3d0 . #xe909) "Material Icons")
+    (set-fontset-font t '(#xe3d0 . #xe3d9) "Material Icons"))
   (message "`all-the-icons' loaded"))
 
 (when use-all-the-icons
@@ -563,11 +570,12 @@ debian, and derivatives). On most it's 'fd'.")
     :config
     (message "`all-the-icons-completion' loaded")))
 
-(use-package nerd-icons
-  :config
-  (unless use-all-the-icons (set-fontset-font t '(#x25d0 . #xf10d7) "Symbols Nerd Font Mono"))
-  (set-fontset-font t '(#xe3d0 . #xe3d9) "Material Icons")
-  (message "`nerd-icons' loaded"))
+(unless use-all-the-icons
+  (use-package nerd-icons
+    :config
+    (set-fontset-font t '(#x25d0 . #xf10d7) "Symbols Nerd Font Mono")
+    (set-fontset-font t '(#xe3d0 . #xe3d9) "Material Icons")
+    (message "`nerd-icons' loaded")))
 
 (unless use-all-the-icons
   (use-package nerd-icons-dired
@@ -592,18 +600,19 @@ debian, and derivatives). On most it's 'fd'.")
   ;; `variable-pitch' face supports it
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   ;; Enable all Fira Code ligatures in programming modes
-  (ligature-set-ligatures 'prog-mode '(
-                                       "www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
-                                       ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
-                                       "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
-                                       "#_(" ".-" ".=""..<""?=" "??" ";;" "/*" "/**"
-                                       ;; "..""..."
-                                       "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
-                                       "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
-                                       "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
-                                       "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
-                                       "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
-                                       "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%" "[|" "|]"))
+  (ligature-set-ligatures
+   'prog-mode '(
+                "www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+                ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+                "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
+                "#_(" ".-" ".=""..<""?=" "??" ";;" "/*" "/**"
+                ;; "..""..."
+                "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+                "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+                "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+                "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+                "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+                "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%" "[|" "|]"))
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t)
@@ -611,11 +620,11 @@ debian, and derivatives). On most it's 'fd'.")
 
 (use-package ansi-color
   :ensure nil
-  :hook
-  (shell-mode . ansi-color-for-comint-mode-on)
+  :hook (shell-mode . ansi-color-for-comint-mode-on)
   :config (message "`ansi-color' loaded"))
 
 (use-package kurecolor
+  :defer t
   :config (message "`kurecolor' loaded"))
 
 (use-package emojify
@@ -791,7 +800,7 @@ debian, and derivatives). On most it's 'fd'.")
 (defun mdrp/unpropertize-kill-ring ()
   (setq kill-ring (mapcar 'substring-no-properties kill-ring)))
 
-(add-hook 'kill-emacs-hook 'mdrp/unpropertize-kill-ring)
+(add-hook 'kill-emacs-hook #'mdrp/unpropertize-kill-ring)
 
 (use-package emacs
   :ensure nil
@@ -829,8 +838,7 @@ in the current buffer.
 (setq-default cursor-in-non-selected-windows t) ; Hide the cursor in inactive windows
 
 (use-package nlinum
-  :init
-  (global-nlinum-mode 1)
+  :init (global-nlinum-mode 1)
   :config
   (setq nlinum--width (length (number-to-string (count-lines (point-min) (point-max)))))
   (message "`nlinum' loaded"))
@@ -884,7 +892,6 @@ in the current buffer.
 
 (use-package discover-my-major
   :after general
-  :defer t
   :general ("C-h C-m" 'discover-my-major)
   :config (message "`discover-my-major' loaded"))
 
@@ -915,8 +922,6 @@ in the current buffer.
   (message "`json' loaded"))
 
 (use-package lsp-ltex
-  :ensure t
-  :defer t
   :hook (text-mode . (lambda ()
                        (require 'lsp-ltex)
                        (lsp-deferred)))
@@ -933,23 +938,19 @@ in the current buffer.
   ("C-M-$" 'jinx-languages))
 
 (use-package highlight-symbol
-  :defer t
-    :init (highlight-symbol-mode)
-    :general
-    (:keymaps 'highlight-symbol-nav-mode-map
-              "M-n" nil
-              "M-p" nil
-              )
-    ("M-S-<down>"   '(highlight-symbol-next :which-key "go to the next symbol"))
-    ("M-S-<up>"     '(highlight-symbol-prev :which-key "go to the previous symbol"))
-    :config
-    (add-hook 'prog-mode-hook #'highlight-symbol-nav-mode)
-    (message "`highlight-symbol' loaded"))
+  :init (highlight-symbol-mode)
+  :hook (prog-mode . highlight-symbol-nav-mode)
+  :general
+  (:keymaps 'highlight-symbol-nav-mode-map
+            "M-n" nil
+            "M-p" nil)
+  ("M-S-<down>"   '(highlight-symbol-next :which-key "go to the next symbol"))
+  ("M-S-<up>"     '(highlight-symbol-prev :which-key "go to the previous symbol"))
+  :config (message "`highlight-symbol' loaded"))
 
 (use-package hydra
   :defer t
-  :custom
-  (hydra-default-hint nil)
+  :custom (hydra-default-hint nil)
   :config
   (defhydra hydra-dates (:color teal)
     (concat "\n " (mdrp/hydra-heading "Dates" "Insert" "Insert with Time")
@@ -968,7 +969,6 @@ in the current buffer.
   (message "`hydra' loaded"))
 
 (use-package keycast
-  :defer t
   :commands keycast-mode
   :config
   (define-minor-mode keycast-mode
@@ -992,7 +992,6 @@ in the current buffer.
   :load-path "lisp/"
   :ensure nil
   :commands hide-region-pin
-  :defer t
   :general
   ("C-c r u" 'hide-region-unpin)
   :config (message "`hide-region loaded"))
@@ -1002,18 +1001,14 @@ in the current buffer.
   :config (message "`hide-mode-line loaded"))
 
 (use-package vundo
-  :ensure t
-  :defer t
   :commands (vundo)
-  :general
-  ("C-x u" 'vundo)
+  :general ("C-x u" 'vundo)
   :custom
   (vundo-glyph-alist vundo-unicode-symbols)
   (vundo-compact-display t))
 
 (use-package whitespace
   :ensure nil
-  :defer t
   :hook
   (prog-mode . whitespace-mode)
   (text-mode . whitespace-mode)
@@ -1021,15 +1016,14 @@ in the current buffer.
   (whitespace-style '(face empty indentation::space tab trailing))
   :config (message "`whitespace loaded"))
 
-(use-package locked-window-buffer-mode
-  :ensure nil
-  :general ("M-l"    'locked-window-buffer-mode))
-
-
 (define-minor-mode locked-window-buffer-mode
   "Make the current window always display this buffer."
   :lighter "locked"
   (set-window-dedicated-p (selected-window) locked-window-buffer-mode))
+
+(use-package locked-window-buffer-mode
+  :ensure nil
+  :general ("M-l l"    'locked-window-buffer-mode))
 
 (use-package dired
   :ensure nil
@@ -1038,8 +1032,32 @@ in the current buffer.
             "DEL" 'dired-up-directory))
 
 (use-package dirvish
-  :demand t
-  :config (dirvish-override-dired-mode))
+  :commands dirvish-find-entry-a dirvish-dired-noselect-a
+  :init
+  (advice-add #'dired-find-file :override #'dirvish-find-entry-a)
+  (advice-add #'dired-noselect :around #'dirvish-dired-noselect-a)
+
+  (defun mdrp/dired-update-mode-line-height-h ()
+    (when-let (height (bound-and-true-p doom-modeline-height))
+      (setq dirvish-mode-line-height height
+            dirvish-header-line-height height)))
+  :hook (dired-mode . mdrp/dired-update-mode-line-height-h)
+  :config
+  ;; From doomemacs/blob/master/modules/emacs/dired/config.el#L84C1-L89C35
+  ;; Don't recycle sessions. We don't want leftover buffers lying around,
+  ;; especially if users are reconfiguring Dirvish or trying to recover from an
+  ;; error. It's too easy to accidentally break Dirvish (e.g. by focusing the
+  ;; header window) at the moment, or get stuck in a focus loop with the buried
+  ;; buffers. Starting from scratch isn't even that expensive, anyway.
+  (setq dirvish-reuse-session nil)
+  (setq dirvish-attributes '(file-size)
+        dirvish-mode-line-format
+        '(:left (sort file-time symlink) :right (omit yank index)))
+  (setq dirvish-subtree-always-show-state t)
+  (mdrp/appendq! dirvish-attributes '(nerd-icons subtree-state))
+  (setq dirvish-hide-details '(dirvish dirvish-side)
+        dirvish-hide-cursor '(dirvish dirvish-side))
+  (dirvish-override-dired-mode))
 
 (use-package dwim-shell-command
   :ensure (dwim-shell-command :files (:defaults "*.el"))
@@ -1051,12 +1069,10 @@ in the current buffer.
             [remap dired-smart-shell-command]    'dwim-shell-command)
   :config (require 'dwim-shell-commands))
 
-(use-package transient
-  :ensure t)
+(use-package transient)
 
 (use-package magit
   :defer t
-  :ensure t
   :general
   ("C-c g"  'magit-file-dispatch)
   ("M-v"    '(:keymap magit-mode-map :package magit :wk "Magit-:"))
@@ -1081,7 +1097,6 @@ in the current buffer.
 
 (when use-magit-todos
   (use-package magit-todos
-    :defer t
     :hook (magit . magit-todos)
     :config
     (setq magit-todos-keywords-list (-mapcat (lambda (assoc) (list (car assoc))) hl-todo-keyword-faces))
@@ -1158,9 +1173,7 @@ in the current buffer.
 
 (use-package org
   :defer t
-  :ensure nil
   :mode ("\\.org\\'" . org-mode)
-  :load-path "lisp/org-mode/lisp"
   :hook
   (org-mode . mixed-pitch-mode)
   (org-mode . mdrp/org-mode-hook)
@@ -1182,6 +1195,7 @@ in the current buffer.
             "C-c C-c"                 'org-edit-src-exit)
 
   :init
+  (general-unbind org-mode-map "M-h")
   (defun mdrp/logger ()
     (interactive)
     "Print logger"
@@ -1338,7 +1352,6 @@ in the current buffer.
   (message "`org-modern' loaded"))
 
 (use-package org-auto-tangle
-  :defer t
   :hook (org-mode . org-auto-tangle-mode)
   :config (message "`org-auto-tangle' loaded"))
 
@@ -1352,7 +1365,6 @@ in the current buffer.
   )
 
 (use-package org-inline-pdf
-  :defer t
   :ensure-system-package pdf2svg
   :hook (org-mode . org-inline-pdf-mode)
   :config (message "`org-inline-pdf' loaded"))
@@ -1370,7 +1382,6 @@ in the current buffer.
         cfw:fchar-top-right-corner ?┓))
 
 (use-package calfw-org
-  :defer t
   :after calfw
   :ensure nil
   :init
@@ -1419,7 +1430,6 @@ in the current buffer.
 
   (use-package org-gcal
     :after json
-    :defer t
     :custom
     (org-gcal-client-id (get-secrets-config-value 'org-gcal-client-id))
     (org-gcal-client-secret (get-secrets-config-value 'org-gcal-client-secret))
@@ -1445,7 +1455,6 @@ in the current buffer.
   (message "`org-super-agenda' loaded"))
 
 (use-package org-appear
-  :disabled
   :after org
   :ensure (org-appear :host github :repo "awth13/org-appear" :branch "org-9.7-fixes")
   :defer t
@@ -1457,7 +1466,6 @@ in the current buffer.
 
 (when use-org-roam
   (use-package org-roam
-    :defer t
     :after org
     :custom
     (org-roam-directory (file-truename "~/org/org-roam"))
@@ -1523,7 +1531,6 @@ in the current buffer.
     (message "`org-roam' loaded"))
 
   (use-package org-roam-ui
-    :defer t
     :after org-roam
     :config
     (setq org-roam-ui-sync-theme t
@@ -1533,7 +1540,7 @@ in the current buffer.
     (message "`org-roam-ui' loaded")))
 
 (use-package org-make-toc
-  :defer t
+  :commands org-make-toc
   :custom
   (org-make-toc-insert-custom-ids t)
   :config
@@ -1552,9 +1559,7 @@ in the current buffer.
   :config (message "`ox-moderncv' loaded"))
 
 (use-package org-present
-  :ensure t
-  :demand t
-  :after org
+  :commands org-present
   :general
   (:keymaps 'org-present-mode-keymap
             "<right>" 'mdrp/org-next-visible-heading-and-expand
@@ -1668,8 +1673,6 @@ in the current buffer.
       (setq mdrp/lsp--optimization-init-p t))))
 
 (use-package lsp-mode
-  :defer t
-  :after projectile
   :commands lsp
   :init
   (defun minad/orderless-dispatch-prefixes-first (_pattern index _total)
@@ -1799,7 +1802,6 @@ in the current buffer.
 
 ;; Useful link : https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
 (use-package lsp-ui
-  :defer t
   :hook (lsp-mode . lsp-ui-mode)
   :general
   ("C-M-d" 'lsp-ui-doc-show)
@@ -1832,7 +1834,6 @@ in the current buffer.
   :config (message "`lsp-ui' loaded"))
 
 (use-package lsp-treemacs
-  :defer t
   :after lsp
   :config (message "`lsp-treemacs' loaded"))
 
@@ -1861,7 +1862,6 @@ in the current buffer.
   :config (message "`highlight-indent-guides' loaded"))
 
 (use-package apheleia
-  :defer t
   :hook
   (c-mode        . apheleia-mode)
   (c++-mode      . apheleia-mode)
@@ -1990,12 +1990,10 @@ have one rule for each file type."
    "C-c C-a"                       'mdrp/find-sibling-file-wrapper))
 
 (use-package fontify-face
-  :defer t
   :hook (font-lock-mode . fontify-face-mode)
   :config (message "`fontify-face' loaded"))
 
 (use-package flycheck
-  :defer t
   :init
   (define-prefix-command 'mdrp-fly-map nil "Fly-")
   (defvar-keymap mdrp-flycheck-overlay-map
@@ -2025,7 +2023,6 @@ have one rule for each file type."
 (use-package flycheck-correct
   :load-path "lisp/"
   :ensure nil
-  :defer t
   :hook flycheck-mode
   :general
   (:keymaps 'flycheck-mode-map
@@ -2033,6 +2030,7 @@ have one rule for each file type."
   :config (message "`flycheck-correct' loaded"))
 
 (use-package quick-peek
+  :after flycheck
   :config (message "`quick-peek' loaded"))
 
 (use-package flycheck-inline
@@ -2058,7 +2056,6 @@ have one rule for each file type."
   :hook (flycheck-mode . (lambda () (flycheck-rust-setup))))
 
 (use-package hideshow
-  :defer t
   :ensure nil
   :hook (prog-mode . (lambda ()
                        (unless (eq major-mode 'tree-sitter-query-mode)
@@ -2071,7 +2068,6 @@ have one rule for each file type."
   (message "`hideshow' loaded"))
 
 (use-package projectile
-  :demand t
   :hook (prog-mode . projectile-mode)
   :general
   ("M-p"  'projectile-command-map)
@@ -2171,9 +2167,7 @@ with a prefix ARG."
 (use-package vertico
   :ensure (vertico :files (:defaults "extensions/*"))
   :defer t
-  :after general
-  :init
-  (vertico-mode)
+  :init (vertico-mode)
   :general
   (:keymaps 'vertico-map
             "<tab>" #'minibuffer-complete         ; common prefix
@@ -2229,7 +2223,6 @@ with a prefix ARG."
 (use-package vertico-multiform
   :after vertico
   :ensure nil
-  :defer t
   :custom
   (vertico-buffer-display-action '(display-buffer-in-side-window
                                    (side . right)
@@ -2257,7 +2250,6 @@ with a prefix ARG."
     (message "`vertico-posframe loaded")))
 
 (use-package consult
-  :defer t
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
   :hook (completion-list-mode . consult-preview-at-point-mode)
@@ -2454,7 +2446,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
   :after (embark consult)
-  :defer t
   :hook
   (embark-collect-mode . consult-preview-at-point-mode)
   :config
@@ -2520,7 +2511,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 
 (use-package corfu-popupinfo
   :ensure nil
-  :after corfu
   :hook (corfu-mode . corfu-popupinfo-mode)
   :general
   (:keymaps 'corfu-popupinfo-map
@@ -2625,15 +2615,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   ;;         (value ,(nerd-icons-codicon "nf-cod-symbol_field") :face font-lock-builtin-face)
   ;;         (variable ,(nerd-icons-codicon "nf-cod-symbol_variable") :face font-lock-variable-name-face)
   ;;         (t ,(nerd-icons-codicon "nf-cod-code") :face font-lock-warning-face)))
-
-  ;; Add hook to reset cache so the icon colors match my theme
-  ;; ;; NOTE 2022-02-05: This is a hook which resets the cache whenever I switch
-  ;; the theme using my custom defined command for switching themes. If I don't
-  ;; do this, then the backgound color will remain the same, meaning it will not
-  ;; match the background color corresponding to the current theme. Important
-  ;; since I have a light theme and dark theme I switch between. This has no
-  ;; function unless you use something similar
-  ;; (add-hook 'kb/themes-hooks #'(lambda () (interactive) (kind-icon-reset-cache)))
   :config (message "`kind-icon' loaded"))
 
 (use-package emacs
@@ -2750,7 +2731,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 
 (use-package marginalia
   :after vertico
-  :defer t
   :init (marginalia-mode)
   :custom
   (marginalia-align 'center)
@@ -3061,13 +3041,11 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   :config (message "`pretty-outlines' loaded"))
 
 (use-package rainbow-mode
-  :defer t
   :hook (help-mode prog-mode text-mode org-mode)
   :config (message "`rainbow-mode' loaded"))
 
 (if use-rainbow
     (use-package rainbow-delimiters
-      :defer t
       :hook (prog-mode . rainbow-delimiters-mode)
       :config (message "`rainbow-delimiters' loaded")))
 
@@ -3360,7 +3338,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 (when use-markdown
   (use-package markdown-mode
     :ensure nil
-    :defer t
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'"       . markdown-mode)
            ("\\.markdown\\'" . gfm-mode))
@@ -3380,14 +3357,12 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 (when use-pandoc
   (use-package pandoc-mode
     :ensure-system-package pandoc
-    :defer t
     :hook ((markdown-mode . pandoc-mode)
            (pandoc-mode . pandoc-load-default-settings))
     :config (message "`pandoc-mode' loaded")))
 
 (use-package conf-mode
   :ensure nil
-  :defer t
   :mode (
          ("/\\.merlin\\'" . conf-mode)
          ("_tags\\'" . conf-mode)
@@ -3397,7 +3372,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   :config (message "`conf-mode' loaded"))
 
 (use-package json-mode
-  :defer t
   :mode (("\\.bowerrc$"     . json-mode)
          ("\\.jshintrc$"    . json-mode)
          ("\\.json_schema$" . json-mode)
@@ -3415,7 +3389,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (message "`json-mode' loaded"))
 
 (use-package dune
-  :defer t
   :mode ("^dune$" "^dune-project$")
   :init
   (define-prefix-command 'mdrp-dune-map nil "Dune-")
@@ -3451,8 +3424,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
             "C-c C-a" nil))
 
 (use-package ccls
-  :after projectile
-  :demand t
   :hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda () (require 'ccls) (lsp)))
   :config
   (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
@@ -3510,13 +3481,11 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
     :config (message "`cider' loaded")))
 
 (use-package elisp-mode
-  :defer t
   :ensure nil
   :hook (elisp-mode . semantic-mode)
   :config (message "`elisp-mode' loaded"))
 
 (use-package puni
-  :defer t
   :hook ((clojure-mode elisp-mode) . puni-mode)
   :config (message "`puni' loaded")
   ;; :general
@@ -3526,7 +3495,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   )
 
 (use-package flycheck-package
-  :defer t
   :hook (flycheck-mode . (lambda () (flycheck-package-setup)))
   :config (message "`flycheck-package' loaded"))
 
@@ -3844,7 +3812,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (use-package ocp-indent
     ;; must be careful to always defer this, it has autoloads that adds hooks
     ;; which we do not want if the executable can't be found
-    :defer t
     :hook (tuareg-mode . mdrp/ocaml-init-ocp-indent-h)
     :config
     (defun mdrp/ocaml-init-ocp-indent-h ()
@@ -3856,7 +3823,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 (when use-ocaml
   (use-package tuareg-menhir
     :ensure nil
-    :defer t
     :mode ("\\.mly'" . tuareg-menhir-mode)
     :config (message "`tuareg-menhir' loaded")))
 
@@ -3864,7 +3830,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (use-package dune-minor
     :load-path "lisp/"
     :ensure nil
-    :defer t
     :hook (tuareg-mode . dune-minor-mode)
     :config (message "`dune-minor' loaded")))
 
@@ -3875,7 +3840,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   )
 
 (use-package pdf-tools
-  :defer t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :magic ("%PDF" . pdf-view-mode)
   :hook
@@ -3888,7 +3852,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (message "`pdf-tools' loaded"))
 
 (use-package saveplace-pdf-view
-  :defer t
   :after pdf-view
   :config (message "`saveplace-pdf-view' loaded"))
 
@@ -3972,7 +3935,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
       (setq refmt-command refmt-bin)))
 
   (use-package reason-mode
-          :defer t
+    :defer t
     :config
     (add-hook
      'reason-mode-hook
@@ -3986,7 +3949,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
     :mode (("Appraisals\\'" . enh-ruby-mode)
            ("\\(Rake\\|Thor\\|Guard\\|Gem\\|Cap\\|Vagrant\\|Berks\\|Pod\\|Puppet\\)file\\'" . enh-ruby-mode)
            ("\\.\\(rb\\|rabl\\|ru\\|builder\\|rake\\|thor\\|gemspec\\|jbuilder\\|pryrc\\)\\'" . enh-ruby-mode))
-    :after lsp-mode
     :hook (enh-ruby-mode . lsp-deferred)
     :interpreter "ruby"
     :init
@@ -4012,9 +3974,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 (when use-rust
 
   (use-package rust-mode
-    :ensure t
-    :init
-    (setq rust-mode-treesitter-derive t))
+    :init (setq rust-mode-treesitter-derive t))
 
   (use-package rustic
     :ensure (:repo "emacs-rustic/rustic")
