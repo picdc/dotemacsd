@@ -112,6 +112,7 @@ Literate configuration for init.el.
     - [[#extensions][Extensions]]
   - [[#dwim-shell-commands][Dwim shell commands]]
 - [[#git][Git]]
+  - [[#cond-let][Cond-let]]
   - [[#magit][Magit]]
   - [[#magit-todos][Magit todos]]
   - [[#ediff][Ediff]]
@@ -2730,6 +2731,9 @@ Simple mode to visualize blanks
 :END:
 
 ** Cond-let
+:PROPERTIES:
+:CUSTOM_ID: cond-let
+:END:
 
 #+begin_src emacs-lisp
   (use-package cond-let

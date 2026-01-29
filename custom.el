@@ -124,7 +124,7 @@
  '(use-solaire t)
  '(use-spotify nil)
  '(use-treemacs nil)
- '(use-visual-fill t)
+ '(use-visual-fill nil)
  '(use-web t)
  '(use-window-purpose nil)
  '(use-zig t)

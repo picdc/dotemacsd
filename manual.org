@@ -39,17 +39,22 @@ So here it is!
   - [[#ocaml-templates][Ocaml templates:]]
   - [[#create-sibling-rules][Create sibling rules]]
 - [[#utility][Utility]]
-  - [[#hydras][Hydras]]
-  - [[#repeat-mode][Repeat mode]]
-  - [[#history][History]]
-  - [[#window-management][Window management]]
-  - [[#which-key][Which key]]
-  - [[#region][Region]]
-  - [[#searching][Searching]]
   - [[#crux][Crux]]
-  - [[#spell-and-grammar-checking][Spell and grammar checking]]
+  - [[#history][History]]
+  - [[#hydras][Hydras]]
   - [[#magit][Magit]]
+  - [[#mark][Mark]]
   - [[#programming-utilities][Programming utilities]]
+  - [[#region][Region]]
+  - [[#repeat-mode][Repeat mode]]
+  - [[#searching-must-read][Searching (must read!)]]
+    - [[#consult][Consult]]
+    - [[#isearch-must-read][Isearch (must read!)]]
+    - [[#other-searching-tools][Other searching tools]]
+  - [[#spell-and-grammar-checking][Spell and grammar checking]]
+  - [[#which-key][Which key]]
+  - [[#window-management][Window management]]
+- [[#lsp-mode][LSP mode]]
 - [[#pokemacs-appearance][Pokemacs appearance]]
   - [[#pokemacs-layout][Pokemacs layout]]
 - [[#collaborative-editing][Collaborative editing]]
@@ -205,79 +210,6 @@ This is basically saying: if you try to create an ~.mli~ file from a ~.ml~ file,
 :CUSTOM_ID: utility
 :END:
 
-** Hydras
-:PROPERTIES:
-:CUSTOM_ID: hydras
-:END:
-
-Hydras are modes in which you don't have to use many fingers to execute actions (à la Vi command mode). Find all the available hydras with ~M-h~ (the most important ones are ~M-h t~, ~M-h g~ and ~M-h w~).
-I plan to add more when I have the time.
-
-** Repeat mode
-:PROPERTIES:
-:CUSTOM_ID: repeat-mode
-:END:
-
-A feature that's well hidden and that a lot of emacs users (so let's say 41 out of the 53 emacs users) don't know: some commands in Emacs can be repeated without repeating their prefix.
-
-Try it with ~C-x <left>|<right>|<up>|<down>~ to navigate through your windows by just pressing repeateadly, after the first prefixed command, ~<left>|<right>|<up>|<down>~. If you find yourself repeating a command, there's a high chance that it activated the repeat mode and you don't know. If you want to know precisely the commands that can be repeated you can execute `M-x describe-repeat-maps`.
-
-Repeat-mode is usually left after some time passed without an user action or when you hit a key that is not in the repeat mode keymap. Or you can simply `C-g`.
-
-** History
-:PROPERTIES:
-:CUSTOM_ID: history
-:END:
-
-Avoid using ~compile~ and rather use ~projectile-compile-project~. The savehist package remembers your compilation commands in a single list while it remembers your projectile compilation commands by creating a list for each project. You don't want to ~cargo build~ an OCaml project, right?
-
-~M-p/n~ goes up/down in history even between different emacs sessions. You can use it with ~find-file~, ~isearch~, ~ripgrep~ etc. Emacs loves to remember things but it doesn't need cookies and doesn't send it to the NSA. Win/win.
-
-** Window management
-:PROPERTIES:
-:CUSTOM_ID: window-management
-:END:
-
-Whoops, I just closed the window I was working on and this layout was so hard to obtain. Have you heard about our lord and saviour ~winner-mode~? Don't worry, just hit ~C-c <left>~, it will undo your last window change (and, yes, this is a command that activates the repeat mode).
-
-I also implemented a utility function that will lock a window (yes, no more "why this buffer decided to replace my compilation window?!"), just hit ~M-l l~ on windows you don't want to be filled with a different buffer (and if you're lost with the difference between buffers and windows well, not my mission, sorry, we'll talk about yank and kill another time)
-
-** Which key
-:PROPERTIES:
-:CUSTOM_ID: which-key
-:END:
-
-If you forgot a succession of key bindings but remember the prefix, hit it and wait, ~which-key~ will tell you what you can do next.
-
-** Region
-:PROPERTIES:
-:CUSTOM_ID: region
-:END:
-
-When a region is selected there's a lot of things you can do:
-- Look at what [[file:init.org::#selected][Selected]] offers
-- Search the selected region with ~C-s~ (will autofill the minibuffer with the region) or other search tools like ~consult-ripgrep~ (~M-s r/R~)
-- Pin it with ~C-p~ and unpin with ~M-x hide-region-unpin~ (bound to ~C-c r u~)
-
-** Searching
-:PROPERTIES:
-:CUSTOM_ID: searching
-:END:
-
-- Consult is a powerful tool that's even more powerful when used with orderless and friends. Here are some tips:
-  - ~#regexp#filter-string~: The pattern of a consult input. ~filter-string~ is used to filter the results obtained with ~regexp~
-  - ~M-RET~: Jump to the current result without closing the minibuffer
-  - ~M-.~: Preview the result at point (useful when unsure about the result)
-  - ~<regexp> -- -g *.ml~:  Limit the search to files ending with ~.ml~
-  - ~<regexp> -- -g !pattern~: Remove the files corresponding to ~pattern~ from the search results
-- Isearch is also powerful to find things in a single buffer but people usually quit it when they want to edit their search, don't do that, do this instead:
-  - ~C-g~: Deletes the part of the current search that is not matching anything
-  - ~M-e~: Edit the current search
-  - ~M-c~ (or ~c~ once the input can't be edited): Case sensitivity
-- When the point is on a symbol you can use ~S-M-<up>/<down>~ to jump directly to the exact same symbol in the current buffer.
-- ~M-x embark-act~: allows to execute some code on the current candidate at point (like renaming a file)
-- ~M-x embark-collect~: collects all the candidates in an interactive buffer (one of my favourite features ever)
-
 ** Crux
 :PROPERTIES:
 :CUSTOM_ID: crux
@@ -285,12 +217,22 @@ When a region is selected there's a lot of things you can do:
 
 Look at [[file:init.org::#crux][this doc]] or just hit ~M-m~ to see what's possible (but really, look at [[file:init.org::#crux][this doc]]).
 
-** Spell and grammar checking
+** History
 :PROPERTIES:
-:CUSTOM_ID: spell-and-grammar-checking
+:CUSTOM_ID: history
 :END:
 
-Pokemacs uses [[https://github.com/minad/jinx][Jinx]] because I had issues with flyspell that would slow down emacs tremendously. Change your dictionaries with ~pokemacs-change-dict~, don't use ~jinx-languages~.
+~M-p/n~ goes up/down in history even between different emacs sessions. You can use it with ~find-file~, ~isearch~, ~ripgrep~ etc. Emacs loves to remember things but it doesn't need cookies and doesn't send it to the NSA. Win/win.
+
+Avoid using ~compile~ and rather use ~projectile-compile-project~. The savehist package remembers your compilation commands in a single list while it remembers your projectile compilation commands by creating a list for each project. You don't want to ~cargo build~ an OCaml project, right?
+
+** Hydras
+:PROPERTIES:
+:CUSTOM_ID: hydras
+:END:
+
+Hydras are modes in which you don't have to use many fingers to execute actions (à la Vi command mode). Find all the available hydras with ~M-h~ (the most important ones are ~M-h t~, ~M-h g~ and ~M-h w~).
+I plan to add more when I have the time.
 
 ** Magit
 :PROPERTIES:
@@ -306,6 +248,15 @@ Some tips though:
 
 #+attr_org: :align left :width 800
 [[file:resources/images/magit-transient-level.png]]
+
+** Mark
+:PROPERTIES:
+:CUSTOM_ID: mark
+:END:
+
+The mark is often set with ~C-SPC~. It's used to store a position to which you can jump back (with ~C-U C-SPC~ for a local mark or ~C-x C-SPC~ for a global mark).
+
+Marks are used to create regions with ~C-SPC~ and moving the cursor but can also be used to store a position with ~C-SPC C-SPC~.
 
 ** Programming utilities
 :PROPERTIES:
@@ -332,7 +283,111 @@ Pokemacs uses:
 - Specific to OCaml:
   - Look at the ~M-x ocaml-utils-*~ commands (WiP)
 
+** Region
+:PROPERTIES:
+:CUSTOM_ID: region
+:END:
+
+When a region is selected there's a lot of things you can do:
+- Look at what [[file:init.org::#selected][Selected]] offers
+- Search the selected region with ~C-s~ (will autofill the minibuffer with the region) or other search tools like ~consult-ripgrep~ (~M-s r/R~)
+- Pin it with ~C-p~ and unpin with ~M-x hide-region-unpin~ (bound to ~C-c r u~)
+
+** Repeat mode
+:PROPERTIES:
+:CUSTOM_ID: repeat-mode
+:END:
+
+A feature that's well hidden and that a lot of emacs users (so let's say 41 out of the 53 emacs users) don't know: some commands in Emacs can be repeated without repeating their prefix.
+
+Try it with ~C-x <left>|<right>|<up>|<down>~ to navigate through your windows by just pressing repeateadly, after the first prefixed command, ~<left>|<right>|<up>|<down>~. If you find yourself repeating a command, there's a high chance that it activated the repeat mode and you don't know. If you want to know precisely the commands that can be repeated you can execute `M-x describe-repeat-maps`.
+
+Repeat-mode is usually left after some time passed without an user action or when you hit a key that is not in the repeat mode keymap. Or you can simply `C-g`.
+
+** Searching (must read!)
+:PROPERTIES:
+:CUSTOM_ID: searching-must-read
+:END:
+
+*** Consult
+:PROPERTIES:
+:CUSTOM_ID: consult
+:END:
+
+Consult is a powerful tool that's even more powerful when used with orderless and friends. Here are some tips:
+
+- ~#regexp#filter-string~: The pattern of a consult input. ~filter-string~ is used to filter the results obtained with ~regexp~
+- ~M-RET~: Jump to the current result without closing the minibuffer
+- ~M-.~: Preview the result at point (useful when unsure about the result)
+- ~<regexp> -- -g *.ml~:  Limit the search to files ending with ~.ml~
+- ~<regexp> -- -g !pattern~: Remove the files corresponding to ~pattern~ from the search results
+
+*** Isearch (must read!)
+:PROPERTIES:
+:CUSTOM_ID: isearch-must-read
+:END:
+
+Isearch is one of the most powerful tools in emacs to find things.
+It is sadly often underused or misused so I'll try to give you some quick tips.
+
+First of all, an isearch session can be started with
+- ~C-s~ or ~C-r~, start writing some characters to start the search (will be preemptively filled if used with a region selected)
+- ~M-s .~ start searching the symbol at point. There is a difference between an ordinary search and a symbol search. A symbol search will also consider the boundaries when searching. For example:
+  #+begin_src emacs-lisp
+  type data_dir = {data : string}
+
+  let data d = d.data
+
+  let my_data = ""
+  #+end_src
+  - ~C-s data~ will highlight all the occurrences of the word ~data~ (~data_dir~, ~data~, ~my_data~ etc)
+  - ~M-s .~ over ~data~ will only highlight the symbols ~data~ (~data : string~, ~data~, ~d.data~)
+
+Also, don't quit your isearch session when you want to edit your search, do this instead:
+
+- ~C-g~: Deletes the part of the current search that is not matching anything
+- ~M-e~: Edits the current search
+- ~M-c~ (or ~c~ once the input can't be edited): Case sensitivity
+- ~M-_~: toggles the symbol mode
+
+When starting an ~isearch~ session, the [[#mark][mark]] is set to where the cursor was before the session started. *You can easily jump back to where you were before searching* with ~C-u C-SPC~!
+
+*** Other searching tools
+:PROPERTIES:
+:CUSTOM_ID: other-searching-tools
+:END:
+
+- When the point is on a symbol you can use ~S-M-<up>/<down>~ to jump directly to the exact same symbol in the current buffer.
+- ~M-x embark-act~: allows to execute some code on the current candidate at point (like renaming a file)
+- ~M-x embark-collect~: collects all the candidates in an interactive buffer (one of my favourite features ever)
+
+** Spell and grammar checking
+:PROPERTIES:
+:CUSTOM_ID: spell-and-grammar-checking
+:END:
+
+Pokemacs uses [[https://github.com/minad/jinx][Jinx]] because I had issues with flyspell that would slow down emacs tremendously. Change your dictionaries with ~pokemacs-change-dict~, don't use ~jinx-languages~.
+
+** Which key
+:PROPERTIES:
+:CUSTOM_ID: which-key
+:END:
+
+If you forgot a succession of key bindings but remember the prefix, hit it and wait, ~which-key~ will tell you what you can do next.
+
+** Window management
+:PROPERTIES:
+:CUSTOM_ID: window-management
+:END:
+
+Whoops, I just closed the window I was working on and this layout was so hard to obtain. Have you heard about our lord and saviour ~winner-mode~? Don't worry, just hit ~C-c <left>~, it will undo your last window change (and, yes, this is a command that activates the repeat mode).
+
+I also implemented a utility function that will lock a window (yes, no more "why this buffer decided to replace my compilation window?!"), just hit ~M-l l~ on windows you don't want to be filled with a different buffer (and if you're lost with the difference between buffers and windows well, not my mission, sorry, we'll talk about yank and kill another time)
+
 * LSP mode
+:PROPERTIES:
+:CUSTOM_ID: lsp-mode
+:END:
 
 LSP mode is a powerful yet under-exploited tool. Here are some of the tricks (some apply in the general case, some are related to OCaml):
 
