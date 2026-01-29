@@ -3222,7 +3222,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
             "<return>" 'corfu-insert
             "M-d" 'corfu-info-documentation
             "M-l" 'corfu-info-location
-            "TAB" 'corfu-insert-separator
+            "TAB" 'corfu-complete
             "M-SPC" 'corfu-insert-separator
             "M-m" 'corfu-move-to-minibuffer
             "<down>" 'corfu-next)

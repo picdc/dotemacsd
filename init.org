@@ -4787,7 +4787,7 @@ When using some consult commands (like ~consult-ripgrep~), hitting ~M-RET~ will 
               "<return>" 'corfu-insert
               "M-d" 'corfu-info-documentation
               "M-l" 'corfu-info-location
-              "TAB" 'corfu-insert-separator
+              "TAB" 'corfu-complete
               "M-SPC" 'corfu-insert-separator
               "M-m" 'corfu-move-to-minibuffer
               "<down>" 'corfu-next)
