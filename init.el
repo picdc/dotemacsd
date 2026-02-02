@@ -4569,8 +4569,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (use-package tuareg
     :ensure-system-package
     ((ocamllsp . "opam install ocaml-lsp-server")
-     (ocamlformat . "opam install ocamlformat")
-     (ocaml-print-intf . "opam install ocaml-print-intf"))
+     (ocamlformat . "opam install ocamlformat"))
     :mode ("\\.ml\\(<.*>\\)?\\'" . tuareg-mode)
     ;; The following line can be used instead of :ensure t to load
     ;; the tuareg.el file installed with tuareg when running opam install tuareg
