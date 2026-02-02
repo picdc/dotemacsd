@@ -824,8 +824,7 @@ debian, and derivatives). On most it's 'fd'.")
   :demand t
   :config
   (when use-all-the-icons
-    (set-fontset-font t '(#xe3d0 . #xe909) "Material Icons")
-    (set-fontset-font t '(#xe3d0 . #xe3d9) "Material Icons"))
+    (set-fontset-font t '(#xe3d0 . #xe909) "Material Icons"))
   (message "`all-the-icons' loaded"))
 
 (when use-all-the-icons
@@ -848,8 +847,19 @@ debian, and derivatives). On most it's 'fd'.")
   (use-package nerd-icons
     :demand t
     :config
-    (set-fontset-font t '(#x25d0 . #xf13ab) "Symbols Nerd Font Mono")
-    (set-fontset-font t '(#xe3d0 . #xe3d9) "Material Icons")
+    (set-fontset-font t 'symbol
+                      (cond
+                       ((member "Symbols Nerd Font Mono" (font-family-list)) "Symbols Nerd Font Mono")
+                       ((member "Segoe UI Symbol" (font-family-list)) "Segoe UI Symbol")
+                       ((member "Apple Symbols" (font-family-list)) "Apple Symbols")
+                       ((member "Symbola" (font-family-list)) "Symbola")))
+    (set-fontset-font t 'emoji
+                      (cond
+                       ((member "Noto Color Emoji" (font-family-list)) "Noto Color Emoji")
+                       ((member "Noto Emoji" (font-family-list)) "Noto Emoji")
+                       ((member "Apple Color Emoji" (font-family-list)) "Apple Color Emoji")
+                       ((member "Segoe UI Emoji" (font-family-list)) "Segoe UI Emoji")
+                       ((member "Symbola" (font-family-list)) "Symbola")))
     (message "`nerd-icons' loaded")))
 
 (unless use-all-the-icons
@@ -1914,7 +1924,7 @@ debian, and derivatives). On most it's 'fd'.")
   (org-hide-macro-markers t)
   (org-image-actual-width '(300))
   (org-image-align 'center)
-  (org-latex-compiler "latexmk")
+  (org-latex-compiler "xelatex")
   (org-log-done 'time)
   (org-odd-levels-only nil)
   (org-pretty-entities t)
