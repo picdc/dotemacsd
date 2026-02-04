@@ -4,12 +4,12 @@
 
 
 ;; Author: mattiasdrp
-;; Maintainer: mattiasdrp <https://github.com/mattiasdrp>
+;; Maintainer: mattiasdrp <https://codeberg.org/mattiasdrp>
 ;; Created: 17 august 2022
 ;; Version: 0.1.0
 ;; Licence: MIT
 ;; Keywords: emacs, tools
-;; URL: https://github.com/mattiasdrp/pokemacs
+;; URL: https://codeberg.org/mattiasdrp/pokemacs
 ;; Copyright (c) 2022 mattiasdrp and contributors.
 
 ;;; Commentary:

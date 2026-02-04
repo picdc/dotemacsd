@@ -3,12 +3,12 @@
 ;; Copyright (c) 2022 mattiasdrp and contributors.
 
 ;; Author: mattiasdrp
-;; Maintainer: mattiasdrp <https://github.com/mattiasdrp>
+;; Maintainer: mattiasdrp <https://codeberg.org/mattiasdrp>
 ;; Created: 17 august 2022
 ;; Version: 1.0
 ;; Licence: MIT
 ;; Keywords: emacs, init, convenience, configuration
-;; URL: https://github.com/mattiasdrp/pokemacs
+;; URL: https://codeberg.org/mattiasdrp/pokemacs
 
   ;;; Commentary:
 ;; This file will be loaded when emacs has finished initializing everything

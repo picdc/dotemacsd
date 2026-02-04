@@ -1,15 +1,15 @@
 ;;; init.el --- Emacs init configuration -*- lexical-binding: t -*-
 ;;
 
-;; Copyright (c) 2022-2025 mattiasdrp and contributors.
+;; Copyright (c) 2022-2026 mattiasdrp and contributors.
 
 ;; Author: mattiasdrp
-;; Maintainer: mattiasdrp <https://github.com/mattiasdrp>
+;; Maintainer: mattiasdrp <https://codeberg.org/mattiasdrp>
 ;; Created: 17 august 2022
 ;; Version: 1.0.0
 ;; Licence: MIT
 ;; Keywords: emacs, init, convenience, configuration
-;; URL: https://github.com/mattiasdrp/pokemacs
+;; URL: https://codeberg.org/mattiasdrp/pokemacs
 ;; Package-Requires: ((emacs "29.1"))
 
 ;;; Commentary:
@@ -2849,7 +2849,7 @@ with a prefix ARG."
     (message "`visual-fill-column' loaded")))
 
 (use-package pokemacs-layout
-  :ensure (:type git :repo "https://github.com/mattiasdrp/pokemacs-layout.git")
+  :ensure (:type git :repo "https://codeberg.org/mattiasdrp/pokemacs-layout.git")
   ;; :ensure nil
   ;; :load-path "~/pokemacs-layout"
   :commands pokemacs-layout-apply pokemacs-layout-monitor-names
@@ -3188,7 +3188,6 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   ;; :ensure (corfu :ref "69f84fe" :files (:defaults "extensions/*"))
   :init
   ;; Function definitions
-
   (defun corfu-enable-always-in-minibuffer ()
     "Enable Corfu in the minibuffer if Vertico/Mct are not active."
     (unless (or (bound-and-true-p mct--active)
@@ -4473,7 +4472,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 
 (use-package ligo-mode
   :demand t
-  :ensure (:type git :host github :repo "mattiasdrp/ligo-mode")
+  :ensure (:type git :host codeberg :repo "mattiasdrp/ligo-mode")
   :mode
   ("\\.mligo\\'" . ligo-caml-mode)
   ("\\.jsligo\\'" . ligo-javascript-mode)
@@ -4704,11 +4703,11 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
 
 (use-package ocaml-utils-mode
   ;; :ensure nil
-  :ensure (ocaml-utils-mode :host github :repo "mattiasdrp/ocaml-utils-mode")
+  ;; :load-path "~/ocaml-utils-mode/"
+  :ensure (ocaml-utils-mode :host codeberg :repo "mattiasdrp/ocaml-utils-mode")
   :hook (tuareg-mode . (lambda ()
                          (require 'pokemacs-layout)
                          (require 'ocaml-utils-mode)))
-  ;; :load-path "~/ocaml-utils-mode/"
   :config
   (setq pokemacs-layout-layouts
         (add-to-list 'pokemacs-layout-layouts

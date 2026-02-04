@@ -4,12 +4,12 @@
 ;; Copyright (c) 2022 mattiasdrp and contributors.
 
 ;; Author: mattiasdrp
-;; Maintainer: mattiasdrp <https://github.com/mattiasdrp>
+;; Maintainer: mattiasdrp <https://codeberg.org/mattiasdrp>
 ;; Created: 17 august 2022
 ;; Version: 1.0
 ;; Licence: MIT
 ;; Keywords: emacs, init, convenience, configuration
-;; URL: https://github.com/mattiasdrp/pokemacs
+;; URL: https://codeberg.org/mattiasdrp/pokemacs
 
 ;;; Commentary:
 
@@ -57,8 +57,6 @@
 
 (setq site-run-file nil)
 
-(setenv "LSP_USE_PLISTS" "true")
-
 (setq default-frame-alist
       '(
         ;; (min-height . 1) '(height . 45)
@@ -69,7 +67,6 @@
         (right-fringe . 8)
         (tool-bar-lines . 0)
         (menu-bar-lines . 0)))
-
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
 (when (fboundp 'menu-bar-mode)
