@@ -247,6 +247,7 @@ Literate configuration for init.el.
     - [[#highlight-sexp][Highlight-sexp]]
   - [[#elm][Elm]]
   - [[#fsharp][Fsharp]]
+  - [[#go][Go]]
   - [[#kotlin][Kotlin]]
   - [[#java][Java]]
   - [[#latex][LaTeX]]
@@ -5825,6 +5826,12 @@ Code folding based on treesit.el tree.
     :type 'boolean
     :tag " F#")
 
+  (defcustom use-go nil
+    "If non-nil, uses the Go packages."
+    :group 'pokemacs-languages
+    :type 'boolean
+    :tag " Go")
+
   (defcustom use-kotlin nil
     "If non-nil, uses the Kotlin packages."
     :group 'pokemacs-languages
@@ -6405,6 +6412,22 @@ This mode will install ~taplo~ through ~cargo~ if it's not already installed to 
                ":"
                (getenv "PATH")))
       :config (message "`fsharp-mode' loaded")))
+#+end_src
+
+** Go
+:PROPERTIES:
+:CUSTOM_ID: go
+:END:
+
+#+begin_src emacs-lisp
+  (when use-go
+
+    (use-package go-ts-mode
+      :ensure nil
+      :hook (go-ts-mode . lsp-deferred))
+
+    (use-package flycheck-golangci-lint
+      :hook (go-ts-mode . flycheck-golangci-lint-setup)))
 #+end_src
 
 ** [[https://github.com/Emacs-Kotlin-Mode-Maintainers/kotlin-mode][Kotlin]]

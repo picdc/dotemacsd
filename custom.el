@@ -95,6 +95,7 @@
  '(use-eaf nil)
  '(use-elm t)
  '(use-fsharp t)
+ '(use-go t)
  '(use-gcal nil)
  '(use-god nil)
  '(use-header-line nil)
@@ -153,6 +154,7 @@
  '(menu ((t (:inherit mode-line))))
  '(mode-line ((t :inherit fixed-pitch)))
  `(mode-line-inactive ((nil ,@tuple-mono-font)))
+ `(gnus-group-news-low ((t :foreground "#AEBACF")))
  `(variable-pitch ((t (,@tuple-variable-font :weight light :height 1.3)))))
 
 (provide 'custom)

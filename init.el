@@ -3997,6 +3997,12 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   :type 'boolean
   :tag " F#")
 
+(defcustom use-go nil
+  "If non-nil, uses the Go packages."
+  :group 'pokemacs-languages
+  :type 'boolean
+  :tag " Go")
+
 (defcustom use-kotlin nil
   "If non-nil, uses the Kotlin packages."
   :group 'pokemacs-languages
@@ -4350,6 +4356,15 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
              ":"
              (getenv "PATH")))
     :config (message "`fsharp-mode' loaded")))
+
+(when use-go
+
+  (use-package go-ts-mode
+    :ensure nil
+    :hook (go-ts-mode . lsp-deferred))
+
+  (use-package flycheck-golangci-lint
+    :hook (go-ts-mode . flycheck-golangci-lint-setup)))
 
 (when use-kotlin
   (use-package kotlin-mode
