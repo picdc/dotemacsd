@@ -220,6 +220,8 @@ Matches the visited file name against the elements of `auto-insert-alist'."
 ;;  "C-x M-1"                 'delete-other-windows
 ;;  )
 
+(elpaca-process-queues)
+
 (provide 'post-init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; post-init.el ends here

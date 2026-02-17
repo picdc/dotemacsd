@@ -416,6 +416,8 @@ You can obviously combine ~:keymaps~ and ~:prefix~
 :END:
 
 #+begin_src emacs-lisp
+  (elpaca-process-queues)
+
   (provide 'post-init)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;; post-init.el ends here
