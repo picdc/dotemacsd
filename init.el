@@ -106,6 +106,13 @@
   :type 'boolean
   :tag "󰕮 Dashboard")
 
+(defcustom use-delta nil
+  "If non-nil, uses the git delta packages.
+  This package improves the magit diff"
+  :group 'pokemacs-packages
+  :type 'boolean
+  :tag "󰇂 Delta")
+
 (defcustom use-eaf nil
   "If non-nil, uses the Emacs application framework."
   :group 'pokemacs-packages
@@ -140,12 +147,6 @@
   :group 'pokemacs-packages
   :type 'boolean
   :tag " Mu4e")
-
-(defcustom use-copilot nil
-  "If non-nil, uses the copilot packages."
-  :group 'pokemacs-packages
-  :type 'boolean
-  :tag " Copilot")
 
 (defcustom use-org nil
   "If non-nil, install Org mode from it's git repo.
@@ -1750,6 +1751,13 @@ debian, and derivatives). On most it's 'fd'.")
           (flycheck-next-error)
         (smerge-vc-next-conflict))))
   (message "`magit' loaded"))
+
+(when use-delta
+  (use-package magit-delta
+  :hook (magit-mode . magit-delta-mode)
+  :config
+  (setenv "DELTA_FEATURES" "+")
+  (setq magit-delta-delta-args (append magit-delta-delta-args '("--features" "magit-delta")))))
 
 (when use-magit-todos
   (use-package magit-todos
@@ -5031,28 +5039,6 @@ Return the folder in which rust-analyzer will be started."
 (when use-sicp
   (use-package sicp))
 
-(when use-copilot
-  (use-package copilot
-    :ensure (copilot :host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
-    :init (copilot-mode)
-    :hook (prog-mode . copilot-mode)
-    :general
-    (:keymaps 'copilot-completion-map
-              "<tab>" 'copilot-accept-completion
-              "TAB" 'copilot-accept-completion
-              "C-TAB" 'copilot-accept-completion-by-word
-              "C-<tab>" 'copilot-accept-completion-by-word
-              "C-n" 'copilot-next-completion
-              "C-p" 'copilot-previous-completion)
-    (add-to-list 'copilot-indentation-alist '(prog-mode 2))
-    (add-to-list 'copilot-indentation-alist '(org-mode 2))
-    (add-to-list 'copilot-indentation-alist '(text-mode 2))
-    (add-to-list 'copilot-indentation-alist '(closure-mode 2))
-    (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))))
-
-(when use-copilot
-  (use-package copilot-chat))
-
 (when use-web
   (use-package web-mode
     :mode "\\.php\\'"
@@ -5085,6 +5071,44 @@ Return the folder in which rust-analyzer will be started."
     :config
     (require 'zig-mode)
     (set-keymap-parent zig-ts-mode-map zig-mode-map)))
+
+(defcustom use-copilot nil
+  "If non-nil, uses the copilot packages."
+  :group 'pokemacs-packages
+  :type 'boolean
+  :tag " Copilot")
+
+(defcustom use-eca nil
+  "If non-nil, uses the ECA (editor code assistants) packages."
+  :group 'pokemacs-packages
+  :type 'boolean
+  :tag "󰵰 ECA")
+
+(when use-copilot
+  (use-package copilot
+    :ensure (copilot :host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+    :init (copilot-mode)
+    :hook (prog-mode . copilot-mode)
+    :general
+    (:keymaps 'copilot-completion-map
+              "<tab>" 'copilot-accept-completion
+              "TAB" 'copilot-accept-completion
+              "C-TAB" 'copilot-accept-completion-by-word
+              "C-<tab>" 'copilot-accept-completion-by-word
+              "C-n" 'copilot-next-completion
+              "C-p" 'copilot-previous-completion)
+    (add-to-list 'copilot-indentation-alist '(prog-mode 2))
+    (add-to-list 'copilot-indentation-alist '(org-mode 2))
+    (add-to-list 'copilot-indentation-alist '(text-mode 2))
+    (add-to-list 'copilot-indentation-alist '(closure-mode 2))
+    (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))))
+
+(when use-copilot
+  (use-package copilot-chat))
+
+(when use-eca
+  (use-package eca
+    :ensure (:host github :repo "editor-code-assistant/eca-emacs")))
 
 (add-hook 'elpaca-after-init-hook
           (lambda ()

@@ -114,6 +114,7 @@ Literate configuration for init.el.
 - [[#git][Git]]
   - [[#cond-let][Cond-let]]
   - [[#magit][Magit]]
+  - [[#magit-delta][Magit delta]]
   - [[#magit-todos][Magit todos]]
   - [[#ediff][Ediff]]
   - [[#highlight-todo][Highlight todo]]
@@ -271,14 +272,16 @@ Literate configuration for init.el.
   - [[#ruby][Ruby]]
   - [[#rust][Rust]]
   - [[#sicp][SICP]]
-  - [[#copilot][Copilot]]
-  - [[#copilot-chat][Copilot-chat]]
   - [[#web-modes][Web modes]]
     - [[#main-mode-14][Main mode]]
     - [[#css-mode][CSS mode]]
     - [[#simple-httpd][Simple HTTPD]]
     - [[#beautify][Beautify]]
   - [[#zig][Zig]]
+- [[#shitty-wizards][Shitty wizards]]
+  - [[#copilot][Copilot]]
+  - [[#copilot-chat][Copilot-chat]]
+  - [[#eca][ECA]]
 - [[#end][End]]
 :END:
 
@@ -439,6 +442,13 @@ This is a list of custom variables that allow to enable/disable features. If you
     :type 'boolean
     :tag "󰕮 Dashboard")
 
+  (defcustom use-delta nil
+    "If non-nil, uses the git delta packages.
+    This package improves the magit diff"
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag "󰇂 Delta")
+
   (defcustom use-eaf nil
     "If non-nil, uses the Emacs application framework."
     :group 'pokemacs-packages
@@ -473,12 +483,6 @@ This is a list of custom variables that allow to enable/disable features. If you
     :group 'pokemacs-packages
     :type 'boolean
     :tag " Mu4e")
-
-  (defcustom use-copilot nil
-    "If non-nil, uses the copilot packages."
-    :group 'pokemacs-packages
-    :type 'boolean
-    :tag " Copilot")
 
   (defcustom use-org nil
     "If non-nil, install Org mode from it's git repo.
@@ -2802,6 +2806,22 @@ Simple mode to visualize blanks
             (flycheck-next-error)
           (smerge-vc-next-conflict))))
     (message "`magit' loaded"))
+#+end_src
+
+** [[https://github.com/dandavison/magit-delta][Magit delta]]
+:PROPERTIES:
+:CUSTOM_ID: magit-delta
+:END:
+
+Make sure [[https://github.com/dandavison/delta][delta]] is installed.
+
+#+begin_src emacs-lisp
+  (when use-delta
+    (use-package magit-delta
+    :hook (magit-mode . magit-delta-mode)
+    :config
+    (setenv "DELTA_FEATURES" "+")
+    (setq magit-delta-delta-args (append magit-delta-delta-args '("--features" "magit-delta")))))
 #+end_src
 
 ** [[https://github.com/alphapapa/magit-todos][Magit todos]]
@@ -7269,43 +7289,6 @@ Some people use this, not my responsibility.
     (use-package sicp))
 #+end_src
 
-** Copilot
-:PROPERTIES:
-:CUSTOM_ID: copilot
-:END:
-
-#+begin_src emacs-lisp
-    (when use-copilot
-      (use-package copilot
-        :ensure (copilot :host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
-        :init (copilot-mode)
-        :hook (prog-mode . copilot-mode)
-        :general
-        (:keymaps 'copilot-completion-map
-                  "<tab>" 'copilot-accept-completion
-                  "TAB" 'copilot-accept-completion
-                  "C-TAB" 'copilot-accept-completion-by-word
-                  "C-<tab>" 'copilot-accept-completion-by-word
-                  "C-n" 'copilot-next-completion
-                  "C-p" 'copilot-previous-completion)
-        (add-to-list 'copilot-indentation-alist '(prog-mode 2))
-        (add-to-list 'copilot-indentation-alist '(org-mode 2))
-        (add-to-list 'copilot-indentation-alist '(text-mode 2))
-        (add-to-list 'copilot-indentation-alist '(closure-mode 2))
-        (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))))
-#+end_src
-
-** Copilot-chat
-:PROPERTIES:
-:CUSTOM_ID: copilot-chat
-:END:
-
-#+begin_src emacs-lisp
-  (when use-copilot
-    (use-package copilot-chat))
-
-#+end_src
-
 ** Web modes
 :PROPERTIES:
 :CUSTOM_ID: web-modes
@@ -7379,6 +7362,75 @@ Zig expects to find the binary for ~zig~ and ~zls~ to be able to run LSP. Custom
       :config
       (require 'zig-mode)
       (set-keymap-parent zig-ts-mode-map zig-mode-map)))
+#+end_src
+
+* Shitty wizards
+:PROPERTIES:
+:CUSTOM_ID: shitty-wizards
+:END:
+
+Company policies sometimes force you to use LLM. I wish they didn't but they do and you need butter in your épinards. So here it is...
+
+#+begin_src emacs-lisp
+  (defcustom use-copilot nil
+    "If non-nil, uses the copilot packages."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag " Copilot")
+
+  (defcustom use-eca nil
+    "If non-nil, uses the ECA (editor code assistants) packages."
+    :group 'pokemacs-packages
+    :type 'boolean
+    :tag "󰵰 ECA")
+#+end_src
+
+** Copilot
+:PROPERTIES:
+:CUSTOM_ID: copilot
+:END:
+
+#+begin_src emacs-lisp
+    (when use-copilot
+      (use-package copilot
+        :ensure (copilot :host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+        :init (copilot-mode)
+        :hook (prog-mode . copilot-mode)
+        :general
+        (:keymaps 'copilot-completion-map
+                  "<tab>" 'copilot-accept-completion
+                  "TAB" 'copilot-accept-completion
+                  "C-TAB" 'copilot-accept-completion-by-word
+                  "C-<tab>" 'copilot-accept-completion-by-word
+                  "C-n" 'copilot-next-completion
+                  "C-p" 'copilot-previous-completion)
+        (add-to-list 'copilot-indentation-alist '(prog-mode 2))
+        (add-to-list 'copilot-indentation-alist '(org-mode 2))
+        (add-to-list 'copilot-indentation-alist '(text-mode 2))
+        (add-to-list 'copilot-indentation-alist '(closure-mode 2))
+        (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))))
+#+end_src
+
+** Copilot-chat
+:PROPERTIES:
+:CUSTOM_ID: copilot-chat
+:END:
+
+#+begin_src emacs-lisp
+  (when use-copilot
+    (use-package copilot-chat))
+
+#+end_src
+
+** [[https://github.com/editor-code-assistant/eca-emacs][ECA]]
+:PROPERTIES:
+:CUSTOM_ID: eca
+:END:
+
+#+begin_src emacs-lisp
+  (when use-eca
+    (use-package eca
+      :ensure (:host github :repo "editor-code-assistant/eca-emacs")))
 #+end_src
 
 * End
