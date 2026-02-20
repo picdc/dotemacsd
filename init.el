@@ -2588,7 +2588,7 @@ have one rule for each file type."
                    ;; If the command is a function we apply it in the current buffer
                    (funcall command))
                   ((stringp command)
-                     ;; If the command is a string, call it as a shell command
+                   ;; If the command is a string, call it as a shell command
                    (with-current-buffer output-buffer
                      (projectile-run-shell-command-in-root
                       (concat command " " file) output-buffer)
