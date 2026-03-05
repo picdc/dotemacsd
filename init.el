@@ -1744,6 +1744,7 @@ debian, and derivatives). On most it's 'fd'.")
   (magit-auto-revert-immediately t)
   (magit-format-file-function #'magit-format-file-nerd-icons)
   :config
+  (transient-suffix-put 'magit-push "-u" :level 1)
   (defun pokemacs-smerge-or-flycheck-next ()
     (interactive)
     (let (files (vc-git-conflicted-files default-directory))
