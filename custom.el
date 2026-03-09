@@ -1,4 +1,4 @@
-;;; package --- Customization for emacs
+;;; package --- Customization for emacs --- -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;; Global customization should be made with M-x customize-variable/face
 ;; so everything can be found in this file

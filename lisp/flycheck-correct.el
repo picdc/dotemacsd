@@ -1,4 +1,4 @@
-;;; flycheck-correct.el --- Emacs Minor Mode for correcting at point with flycheck
+;;; flycheck-correct.el --- Emacs Minor Mode for correcting at point with flycheck --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021  mattiasdrp
 

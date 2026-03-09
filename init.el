@@ -1832,12 +1832,6 @@ debian, and derivatives). On most it's 'fd'.")
 (use-package mixed-pitch
   :config (message "`mixed-pitch' loaded"))
 
-(use-package ob-rust)
-
-(use-package ob-racket
-  :defer t
-  :ensure (:type git :host github :repo "hasu/emacs-ob-racket"))
-
 ;; Install org from its git-repo if use-org is t
 ;; Otherwise, use the one provided by emacs
 (if use-org
@@ -1951,25 +1945,9 @@ debian, and derivatives). On most it's 'fd'.")
    '(("r" "Rendez-vous" agenda* "Rendez-vous du mois"
       ((org-agenda-span 'month)
        (org-agenda-show-all-dates nil)))))
-
-  (org-capture-templates
-   `(
-     ("t" "Task" entry (file+headline ,(concat org-directory "agenda.org") "Calendrier")
-      "* TODO %?\n  %u\n  %a")
-     ("s" "Scheduled" entry (file+headline ,(concat org-directory "agenda.org") "Calendrier")
-      "* TODO %?\n SCHEDULED: %^t \n %a")
-     ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-      "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-     ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
-      "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")))
-
   :config
   ;; TODO states
   (define-prefix-command 'pokemacs-org-map nil "Org-")
-  (defun transform-square-brackets-to-round-ones(string-to-transform)
-    "Transforms [ into ( and ] into ), other chars left unchanged."
-    (concat
-     (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform)))
   (customize-set-value 'org-latex-with-hyperref nil)
   (add-to-list 'org-latex-default-packages-alist "\\PassOptionsToPackage{hyphens}{url}")
 
@@ -1997,6 +1975,7 @@ debian, and derivatives). On most it's 'fd'.")
   (add-hook 'org-mode-hook #'org-setup-<>-syntax-fix)
 
   (calendar-set-date-style 'iso)
+
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
@@ -2004,8 +1983,6 @@ debian, and derivatives). On most it's 'fd'.")
      (emacs-lisp . t)
      (latex . t)
      (ocaml . t)
-     (racket . t)
-     (rust . t)
      (shell . t)))
   (add-hook 'org-mode-hook
             (lambda ()
@@ -2019,10 +1996,28 @@ debian, and derivatives). On most it's 'fd'.")
               (push '("+ [-]" . "") prettify-symbols-alist)
               (push '("* [-]" . "") prettify-symbols-alist)
               (prettify-symbols-mode)))
-
   (message "`org-mode' loaded"))
 
-;; (require 'org-protocol)
+(use-package org-protocol
+  :demand t
+  :ensure nil
+  :init
+  (defun transform-square-brackets-to-round-ones(string-to-transform)
+    "Transforms [ into ( and ] into ), other chars left unchanged."
+    (concat
+     (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform)))
+  :custom
+  (org-capture-templates
+   `(
+     ("t" "Task" entry (file+headline ,(concat org-directory "agenda.org") "Calendrier")
+      "* TODO %?\n  %u\n  %a")
+     ("s" "Scheduled" entry (file+headline ,(concat org-directory "agenda.org") "Calendrier")
+      "* TODO %?\n SCHEDULED: %^t \n %a")
+     ("p" "Protocol" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
+      "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+     ("L" "Protocol Link" entry (file+headline ,(concat org-directory "notes.org") "Inbox")
+      "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")))
+  :config (message "`org-protocol' loaded"))
 
 (use-package org-modern
   :after org
@@ -2158,6 +2153,10 @@ debian, and derivatives). On most it's 'fd'.")
     (org-roam-directory (file-truename "~/org/org-roam"))
     (org-roam-capture-templates
      '(
+       ("a" "article" plain
+        "\n* Source\n\nAuteur: %^{Author}\nTitre: ${title}\nAnnée: %^{Year}\nLien: %^{Link}\n\n* Résumé\n\n%?"
+        :if-new (file+head "article/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :article:\n#+date: %U\n")
+        :unnarrowed t)
        ("d" "default" plain
         "%?"
         :if-new (file+head "defaut/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :defaut:\n#+date: %U\n")
@@ -2166,7 +2165,7 @@ debian, and derivatives). On most it's 'fd'.")
         "\n* Source\n\nAuteur: %^{Author}\nTitre: ${title}\nAnnée: %^{Year}\n\n* Résumé\n\n%?"
         :if-new (file+head "art/livre/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :art::livre:\n#+date: %U\n")
         :unnarrowed t)
-       ("b" "film" plain
+       ("f" "film" plain
         "\n* Source\n\nRéalisateur: %^{Author}\nTitre: ${title}\nAnnée: %^{Year}\n\n* Résumé\n\n%?"
         :if-new (file+head "art/cinema/%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :art::film:\n#+date: %U\n")
         :unnarrowed t)
@@ -3436,11 +3435,18 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   ;; Add `completion-at-point-functions', used by `completion-at-point'.
   (add-to-list 'completion-at-point-functions #'cape-file)
 
+  (defun pokemacs--cape-dict-limited (&rest args)
+    "Run cape-dict but limit results."
+    (let ((result (apply #'cape-dict args)))
+      (when result
+        (cons (car result) (seq-take (cdr result) 2)))))
+
   ;; Defining capf for specific modes
   (defalias 'cape-?dict+keyword
     (if pokemacs-dict
-        (cape-capf-super #'cape-dict #'cape-keyword)
+        (cape-capf-super #'pokemacs--cape-dict-limited #'cape-keyword)
       (cape-capf-super #'cape-keyword)))
+
   :hook
   (org-mode . (lambda () (add-to-list 'completion-at-point-functions #'cape-elisp-block)))
   (git-commit-mode . (lambda () (add-to-list 'completion-at-point-functions #'cape-?dict+keyword)))
@@ -4801,6 +4807,12 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
     (message "`lsp-pyright' loaded")))
 
 (when use-racket
+  (use-package ob-racket
+    :hook (org-mode . (lambda () (require 'ob-racket)))
+    :ensure (:type git :host github :repo "hasu/emacs-ob-racket")
+    :config
+    (message "`ob-racket' loaded"))
+
   (use-package racket-mode))
 
 (when use-reason
@@ -4865,6 +4877,11 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
               "C-c c" 'seeing-is-believing-clear)))
 
 (when use-rust
+
+  (use-package ob-rust
+    :hook (org-mode . (lambda () (require 'ob-rust)))
+    :config
+    (message "`ob-rust' loaded"))
 
   (use-package rustic
     :ensure (:repo "emacs-rustic/rustic")

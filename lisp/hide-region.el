@@ -1,4 +1,4 @@
-;;; hide-region.el --- hide regions of text using overlays
+;;; hide-region.el --- hide regions of text using overlays --- -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2001, 2005  Mathias Dahl
 ;;
@@ -157,10 +157,10 @@ invisable, then add to the \"ring\" in `hide-region-overlays'.  Use this
 method when you have selected some text you want to hide."
   (interactive)
   (let ((new-overlay (make-overlay (mark) (point)))
-	(help-text (buffer-substring-no-properties (mark) (point))))
+	      (help-text (buffer-substring-no-properties (mark) (point))))
     (setq hide-region-overlays
-	  (append
-	   (list new-overlay) hide-region-overlays))
+	        (append
+	         (list new-overlay) hide-region-overlays))
     (overlay-put new-overlay 'invisible t)
     (overlay-put new-overlay 'intangible t)
     (overlay-put new-overlay 'evaporate t)
@@ -171,15 +171,15 @@ method when you have selected some text you want to hide."
     (overlay-put new-overlay 'before-string
                  (if hide-region-propertize-markers
                      (apply 'propertize hide-region-before-string
-			    'help-echo help-text
-			    hide-region-marker-properties) ;region
+			                      'help-echo help-text
+			                      hide-region-marker-properties) ;region
                    hide-region-before-string))
     (overlay-put new-overlay 'after-string
                  (if hide-region-propertize-markers
                      (apply 'propertize
-			    hide-region-after-string
-			    'help-echo help-text
-			    hide-region-marker-properties) ;region)
+			                      hide-region-after-string
+			                      'help-echo help-text
+			                      hide-region-marker-properties) ;region)
                    hide-region-after-string))
 
     ;; return the overlay
@@ -231,8 +231,8 @@ and the overlay is removed revealing the original content in the buffer."
   (interactive)
   (if (car hide-region-overlays)
       (progn
-	(delete-overlay (car hide-region-overlays))
-	(setq hide-region-overlays (cdr hide-region-overlays)))))
+	      (delete-overlay (car hide-region-overlays))
+	      (setq hide-region-overlays (cdr hide-region-overlays)))))
 
 (defun hide-region-unhide-below (point)
   "Unhide a region just below the POINT."
@@ -256,11 +256,11 @@ and the overlay is removed revealing the original content in the buffer."
           (delete-overlay tmp-overlay)
           (if (equal tmp-number 0)
               (setq hide-region-overlays (cdr hide-region-overlays))
-          (delq tmp-overlay hide-region-overlays)))
+            (delq tmp-overlay hide-region-overlays)))
       (if (car hide-region-overlays)
-      (progn
-	(delete-overlay (car hide-region-overlays))
-	(setq hide-region-overlays (cdr hide-region-overlays)))))
+          (progn
+	          (delete-overlay (car hide-region-overlays))
+	          (setq hide-region-overlays (cdr hide-region-overlays)))))
     ))
 
 (defun hide-region-unhide-all ()
@@ -271,7 +271,7 @@ and the overlay is removed revealing the original content in the buffer."
         (progn
           (delete-overlay (car hide-region-overlays))
           (setq hide-region-overlays (cdr hide-region-overlays)
-		hide-region-show-flag t)))))
+		            hide-region-show-flag t)))))
 
 (defun hide-region-toggle (&optional pos)
   "Toggle visability of all hide-region-overlays in the current buffer.
@@ -282,7 +282,7 @@ At some pooint this should accept POS to specify a single region to toggle."
   (let ((number (length hide-region-overlays)))
     (while (>= (setq number (- number 1)) 0)
       (overlay-put (nth number hide-region-overlays)
-		   'invisible hide-region-show-flag))
+		               'invisible hide-region-show-flag))
     (setq hide-region-show-flag (not hide-region-show-flag))))
 
 (provide 'hide-region)
