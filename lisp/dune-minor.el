@@ -1,4 +1,4 @@
-;;; dune-minor.el --- Emacs Minor Mode for Dune, OCaml's Package Manager.
+;;; dune-minor.el --- Emacs Minor Mode for Dune, OCaml's Package Manager. --- -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021  mattiasdrp
 
