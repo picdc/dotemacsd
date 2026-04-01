@@ -4102,6 +4102,13 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   :tag " Zig")
 
 (when use-markdown
+  ;; install markdown-ts-mode from sources since it has only been
+  ;; added in emacs 31
+  ;; (https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS#L3822)
+  (when (version< emacs-version "31")
+    (use-package markdown-ts-mode
+      :ensure t))
+
   (use-package markdown-ts-mode
     :ensure nil
     :mode (("README\\.md\\'" . gfm-mode)
@@ -5126,7 +5133,11 @@ Return the folder in which rust-analyzer will be started."
 
 (when use-eca
   (use-package eca
-    :ensure (:host github :repo "editor-code-assistant/eca-emacs")))
+    :ensure (:host github :repo "editor-code-assistant/eca-emacs"))
+
+  (use-package eca-chat-mode
+    :ensure nil
+    :hook (eca-chat-mode . (lambda () (setq-local completion-at-point-functions '(eca-chat-completion-at-point))))))
 
 (add-hook 'elpaca-after-init-hook
           (lambda ()

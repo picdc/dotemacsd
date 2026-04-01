@@ -5955,6 +5955,13 @@ Code folding based on treesit.el tree.
 
 #+begin_src emacs-lisp
   (when use-markdown
+    ;; install markdown-ts-mode from sources since it has only been
+    ;; added in emacs 31
+    ;; (https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS#L3822)
+    (when (version< emacs-version "31")
+      (use-package markdown-ts-mode
+        :ensure t))
+
     (use-package markdown-ts-mode
       :ensure nil
       :mode (("README\\.md\\'" . gfm-mode)
@@ -7448,7 +7455,11 @@ Company policies sometimes force you to use LLM. I wish they didn't but they do 
 #+begin_src emacs-lisp
   (when use-eca
     (use-package eca
-      :ensure (:host github :repo "editor-code-assistant/eca-emacs")))
+      :ensure (:host github :repo "editor-code-assistant/eca-emacs"))
+
+    (use-package eca-chat-mode
+      :ensure nil
+      :hook (eca-chat-mode . (lambda () (setq-local completion-at-point-functions '(eca-chat-completion-at-point))))))
 #+end_src
 
 * End
