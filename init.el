@@ -3876,6 +3876,7 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   (add-to-list 'treesit-auto-recipe-list pokemacs-ocaml-tsauto-config)
   (add-to-list 'treesit-auto-recipe-list pokemacs-elisp-tsauto-config)
   (add-to-list 'treesit-auto-recipe-list pokemacs-zig-tsauto-config)
+  (setq treesit-auto-langs (remove 'markdown treesit-auto-langs))
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode)
   (message "`treesit-auto' loaded"))
@@ -4102,40 +4103,25 @@ DIR and GIVEN-INITIAL match the method signature of `consult-wrapper'."
   :tag " Zig")
 
 (when use-markdown
-  ;; install markdown-ts-mode from sources since it has only been
-  ;; added in emacs 31
-  ;; (https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS#L3822)
-  (when (version< emacs-version "31")
-    (use-package markdown-ts-mode
-      :ensure t))
-
-  (use-package markdown-ts-mode
-    :ensure nil
+  (use-package markdown-mode
+    :ensure t
     :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'"       . markdown-ts-mode)
+           ("\\.md\\'"       . markdown-mode)
            ("\\.markdown\\'" . gfm-mode))
-    :init
-    (add-to-list 'treesit-language-source-alist
-                 '(markdown "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown/src"))
-    (add-to-list 'treesit-language-source-alist
-                 '(markdown-inline "https://github.com/tree-sitter-grammars/tree-sitter-markdown" "split_parser" "tree-sitter-markdown-inline/src"))
     :hook (gfm-mode . (lambda ()
                         (setq-local markdown-command "pandoc --metadata title:Title -t html5 --css ~/markdown_css/github-markdown-dark.css -f gfm -s")))
+    :general (:keymaps 'markdown-mode-map
+                       "C-c C-e" 'markdown-do)
     :config
     (require 'lsp-marksman)
-    ;; (setq auto-mode-alist (delete '("\\.md\\'" . markdown-ts-mode) auto-mode-alist))
     (setq markdown-command "markdown")
     (setq markdown-open-command "retext")
-    (message "`markdown-ts-mode' loaded")))
+    (message "`markdown-mode' loaded")))
 
 (when use-markdown
   (use-package lsp-marksman
     :ensure nil
     :hook
-    (markdown-ts-mode . (lambda ()
-                          (add-to-list 'lsp-language-id-configuration
-                                       '(markdown-ts-mode . "markdown"))
-                          (lsp-deferred)))
     (markdow-mode . lsp-deferred)))
 
 (when use-markdown
