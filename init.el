@@ -1803,11 +1803,24 @@ debian, and derivatives). On most it's 'fd'.")
   :config (message "`git-modes' loaded"))
 
 (use-package code-review
-  :disabled t
+  :after (magit forge)
+  :ensure (code-review :type git :repo "git@github.com:ArthurHeymans/code-review.git" :branch "Emacs30ClosqlCompat")
   :custom
   (code-review-download-dir (no-littering-expand-var-file-name "backups/"))
   :config
   (message "`code-review' loaded"))
+
+(use-package lab
+  :ensure (lab
+           :type git :repo "https://github.com/isamert/lab.el.git")
+  :config
+  (message "`lab' loaded"))
+
+(use-package forge
+  :after magit
+  :config
+  (setq auth-sources '("~/.authinfo"))
+  (message "`forge' loaded"))
 
 (use-package ghub
   :config (message "`ghub' loaded"))

@@ -2931,11 +2931,43 @@ Some configuration is needed for this to work. See [[file:README.org::#git-hosts
 
 #+begin_src emacs-lisp
   (use-package code-review
-    :disabled t
+    :after (magit forge)
+    :ensure (code-review :type git :repo "git@github.com:ArthurHeymans/code-review.git" :branch "Emacs30ClosqlCompat")
     :custom
     (code-review-download-dir (no-littering-expand-var-file-name "backups/"))
     :config
     (message "`code-review' loaded"))
+#+end_src
+
+** [[https://github.com/isamert/lab.el][Lab]]
+:PROPERTIES:
+:CUSTOM_ID: lab
+:END:
+
+Some configuration is needed for this to work. See [[file:README.org::#git-hosts-and-forges][README.org Git hosts and forges]]
+
+#+begin_src emacs-lisp
+  (use-package lab
+    :ensure (lab
+             :type git :repo "https://github.com/isamert/lab.el.git")
+    :config
+    (message "`lab' loaded"))
+
+#+end_src
+
+** [[https://github.com/magit/forge][Forge]]
+:PROPERTIES:
+:CUSTOM_ID: forge
+:END:
+
+Some configuration is needed for this to work. See [[file:README.org::#git-hosts-and-forges][README.org Git hosts and forges]]
+
+#+begin_src emacs-lisp
+  (use-package forge
+    :after magit
+    :config
+    (setq auth-sources '("~/.authinfo"))
+    (message "`forge' loaded"))
 #+end_src
 
 ** [[https://github.com/magit/ghub][Ghub]]
